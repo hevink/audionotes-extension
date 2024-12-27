@@ -1,6 +1,7 @@
 {
-    "manifest_version": 3,
-    "name": "Hevin extension",
-    "version": "1.0.0",
-    "action": { "default_popup": "index.html" }
-  }
+  "manifest_version": 3,
+  "name": "Audionotes.app",
+  "version": "1.0.0",
+  "action": { "default_popup": "index.html" },
+  "description": "A Chrome extension for creating and managing audio notes."
+}
