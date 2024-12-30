@@ -1,13 +1,14 @@
-import RecordAudio from "./components/extension/RecordAudio";
+import HomePage from "./components/extension/Home";
+import UpgradeToPro from "./components/extension/UpgradeToPro";
 
 const App = () => {
   return (
     <div className="w-96">
-      {" "}
-      <RecordAudio />
+      {/* <RecordAudio /> */}
+      <UpgradeToPro />
+      {/* <HomePage />; */}
     </div>
   );
-  // return <HomePage />;
 };
 
 export default App;
