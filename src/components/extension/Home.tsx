@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Card } from "../components/ui/card";
+import { Card } from "../ui/card";
 import { Mic, FileText, Play, AlertCircle, Dot } from "lucide-react";
-import { Button } from "../components/ui/button";
+import { Button } from "../ui/button";
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("youtube");
