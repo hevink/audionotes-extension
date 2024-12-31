@@ -15,6 +15,11 @@ const Header = ({ setUpgradePlan }: any) => {
       >
         Upgrade Plan
       </button>
+
+      {/* For My account ... */}
+      {/* <button className="bg-[#F8F8F8] text-foreground px-3 py-1 rounded-full font-semibold text-sm">
+        My Account
+      </button> */}
     </div>
   );
 };

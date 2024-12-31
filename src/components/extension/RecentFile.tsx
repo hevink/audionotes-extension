@@ -4,11 +4,11 @@ import RecordIcon from "../../assets/icons/RecordIcon";
 
 const RecentFile = ({ recentFiles, setSendMail }: any) => {
   return (
-    <div className="space-y-6 px-4">
+    <div className="space-y-4 px-4 pb-4">
       {recentFiles.map((file: any) => (
         <div key={file.id} className="space-y-2">
           {file.status === "completed" ? (
-            <>
+            <div>
               <div className="flex gap-3">
                 <div>
                   <button className="text-gray-600 hover:text-gray-800">
@@ -40,10 +40,10 @@ const RecentFile = ({ recentFiles, setSendMail }: any) => {
                   </div>
                 </div>
               </div>
-            </>
+              <div className="border-[1px] border-[#F1F5FA] mt-2" />
+            </div>
           ) : (
             <div className="space-y-2">
-              <div className="border-[1px] border-[#F1F5FA]" />
               <div className="flex items-center gap-2 text-red-500">
                 <div className="bg-plain rounded-full p-1">
                   <AlertCircle className="w-5 h-5 text-white" fill="#FF3300" />
@@ -56,10 +56,10 @@ const RecentFile = ({ recentFiles, setSendMail }: any) => {
         </div>
       ))}
 
-      <div className="space-y-4">
+      <div className="space-y-2">
         <Button
-          variant="outline"
           className="w-full rounded-full font-semibold text-[15px] py-6"
+          variant={"plain"}
         >
           View More
         </Button>

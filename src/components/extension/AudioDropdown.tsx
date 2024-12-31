@@ -35,20 +35,30 @@ const AudioDropdown = ({
       </div>
 
       {isOpen && (
-        <div className="absolute -right-6 mt-5 w-[350px] bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+        <div className="absolute -right-6 mt-5 w-[350px] bg-white rounded-[22px] shadow-lg border border-gray-200 py-2 pb-1 z-50">
           {audioDevices.map((device) => (
             <div
               key={device.id}
-              className="flex items-center justify-between px-4 py-2 hover:bg-gray-50 cursor-pointer"
+              className={`flex items-center justify-between px-3 cursor-pointer`}
               onClick={() => {
                 onDeviceSelect(device);
                 setIsOpen(false);
               }}
             >
-              <span className="text-gray-700">{device.name}</span>
-              {selectedDevice?.id === device.id && (
-                <Check size={16} className="text-orange-500" />
-              )}
+              <div
+                className={`flex items-center justify-between w-full px-4 py-3 ${
+                  selectedDevice?.id === device.id
+                    ? "bg-plain rounded-full"
+                    : ""
+                }`}
+              >
+                <span className="text-heading font-medium text-[15px] leading-5">
+                  {device.name}
+                </span>
+                {selectedDevice?.id === device.id && (
+                  <Check size={18} className="text-primary" />
+                )}
+              </div>
             </div>
           ))}
         </div>

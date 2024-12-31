@@ -42,7 +42,6 @@ const HomePage = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    // Handle generate functionality here
     console.log(e);
   };
 

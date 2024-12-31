@@ -23,14 +23,14 @@ const RecentAudio = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="text-center mb-8 px-4">
-      <p className="text-sm text-active font-medium mb-8">
+    <form onSubmit={handleSubmit} className="text-center mb-4 px-4">
+      <p className="text-sm text-active font-medium mb-2 mt-9">
         To record zoom/google meet call click on include system audio
       </p>
       <div className="space-y-2">
         <div
           onClick={() => setShowLanguagesData("setShowLanguagesData")}
-          className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#F8F8F8]"
+          className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA]"
         >
           <div className="flex items-center gap-2 cursor-pointer">
             <InputLanguageIcon />
@@ -47,7 +47,7 @@ const RecentAudio = ({
             />
           </div>
         </div>
-        <div className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#F8F8F8]">
+        <div className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA]">
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={toggleDropdown}
@@ -66,7 +66,7 @@ const RecentAudio = ({
             toggleDropdown={toggleDropdown}
           />
         </div>
-        <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#F8F8F8]">
+        <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA]">
           <div className="border-2 border-[#A5A5A5] rounded-full h-4 w-4" />
           <span className="text-gray-600 font-medium text-heading text-base">
             Include System Audio
@@ -76,7 +76,7 @@ const RecentAudio = ({
 
       <div className="space-y-2 mt-16">
         <div className="flex items-center justify-center gap-2">
-          <div className="border border-[#E5E5E5] flex rounded-full py-1 px-2 gap-2">
+          <div className="border border-[#E5E5E5] flex rounded-full py-1 px-2 gap-2 shadow-md">
             <p className="text-sm font-semibold text-active">
               Get more minutes
             </p>

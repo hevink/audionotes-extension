@@ -95,7 +95,7 @@ const UpgradePlan = ({ setUpgradePlan }: any) => {
         <h2 className="text-base font-semibold">Send Mail</h2>
       </div>
 
-      <p className="text-active font-medium text-sm">
+      <p className="text-active font-medium text-sm pt-4">
         To upload videos longer than 30 min and other benefits, Upgrade to PRO!
       </p>
 
@@ -118,7 +118,7 @@ const UpgradePlan = ({ setUpgradePlan }: any) => {
             return (
               <div key={i} className="grid grid-cols-12 gap-4">
                 <div className="col-span-8 flex items-center gap-3 pb-2.5">
-                  <div className="bg-[#FFF0EA] p-2 rounded-xl">
+                  <div className="bg-[#FFF0EA] p-1.5 rounded-xl">
                     {list.icon}
                   </div>
                   <span className="font-semibold text-sm leading-5">

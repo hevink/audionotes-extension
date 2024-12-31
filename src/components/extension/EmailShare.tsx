@@ -53,11 +53,11 @@ const EmailShare = ({ setSendMail }: any) => {
           >
             <div className="flex items-center space-x-2 border-[1px] border-primary rounded-full p-2 bg-primary-background">
               <RadioGroupItem value="option-one" id="option-one" />
-              <Label htmlFor="option-one">Option One</Label>
+              <Label htmlFor="option-one">Transcript</Label>
             </div>
             <div className="flex items-center space-x-2  border-[1px] border-primary rounded-full p-2 bg-primary-background">
               <RadioGroupItem value="option-one" id="option-one" />
-              <Label htmlFor="option-one">Option Two</Label>
+              <Label htmlFor="option-one">Summary</Label>
             </div>
           </RadioGroup>
         </div>
