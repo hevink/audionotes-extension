@@ -5,7 +5,7 @@ import EmailShare from "./EmailShare";
 import Header from "../commonComponent/Header";
 import RecentAudio from "./RecentAudio";
 import RecentFile from "./RecentFile";
-// import AuthScreen from "./AuthScreen";
+import AuthScreen from "./AuthScreen";
 import ShowLanguage from "./ShowLanguage";
 import RecordAudio from "./RecordAudio";
 import UpgradePlan from "./UpgradePlan";
@@ -98,11 +98,11 @@ const HomePage = () => {
                   setStartRecordings={setStartRecordings}
                 />
               ) : (
-                <RecentFile
-                  recentFiles={recentFiles}
-                  setSendMail={setSendMail}
-                />
-                // <AuthScreen />
+                // <RecentFile
+                //   recentFiles={recentFiles}
+                //   setSendMail={setSendMail}
+                // />
+                <AuthScreen />
               )}
             </>
           )}

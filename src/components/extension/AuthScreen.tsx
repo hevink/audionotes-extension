@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 const AuthScreen = () => {
   return (
     <div className="p-4">
-      <div className="flex flex-col justify-center items-center p-10">
+      <div className="flex flex-col justify-center items-center p-10 space-y-2">
         <p className="text-foreground font-bold text-lg text-center">
           You are are not Logged In
         </p>
@@ -15,7 +15,7 @@ const AuthScreen = () => {
         </p>
       </div>
 
-      <div className="space-y-2 px-6 pt-8">
+      <div className="space-y-3 px-6 pt-12">
         <Button
           size={"lg"}
           className="flex items-center font-medium text-base leading-5 w-full bg-gradient-to-r from-[#FF4D00] to-[#FF2600] text-white"
