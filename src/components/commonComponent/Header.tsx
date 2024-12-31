@@ -1,6 +1,4 @@
-import React from "react";
-
-const Header = () => {
+const Header = ({ setUpgradePlan }: any) => {
   return (
     <div className="flex justify-between items-center mb-4 px-4 pt-2">
       <div className="flex items-center gap-2">
@@ -11,7 +9,10 @@ const Header = () => {
           Audionotes<span className="text-primary">.app</span>
         </h1>
       </div>
-      <button className="bg-[#FFE9DF] text-primary px-3 py-1 rounded-full font-semibold text-sm">
+      <button
+        onClick={() => setUpgradePlan("upgradePlan")}
+        className="bg-[#FFE9DF] text-primary px-3 py-1 rounded-full font-semibold text-sm"
+      >
         Upgrade Plan
       </button>
     </div>

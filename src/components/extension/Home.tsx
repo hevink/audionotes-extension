@@ -8,12 +8,14 @@ import RecentFile from "./RecentFile";
 // import AuthScreen from "./AuthScreen";
 import ShowLanguage from "./ShowLanguage";
 import RecordAudio from "./RecordAudio";
+import UpgradePlan from "./UpgradePlan";
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("audio");
   const [sendMail, setSendMail] = useState("");
   const [showLanguagesData, setShowLanguagesData] = useState("");
   const [startRecordings, setStartRecordings] = useState("");
+  const [upgradePlan, setUpgradePlan] = useState("");
 
   const recentFiles = [
     {
@@ -58,11 +60,13 @@ const HomePage = () => {
             <ShowLanguage setShowLanguagesData={setShowLanguagesData} />
           ) : startRecordings === "startRecordings" ? (
             <RecordAudio />
+          ) : upgradePlan === "upgradePlan" ? (
+            <UpgradePlan setUpgradePlan={setUpgradePlan} />
           ) : (
             <>
               {" "}
               {/* Header */}
-              <Header />
+              <Header setUpgradePlan={setUpgradePlan} />
               {/* Tabs */}
               <div className="flex mb-6">
                 <button
