@@ -76,7 +76,7 @@ const RecentAudio = ({
 
       <div className="space-y-2 mt-16">
         <div className="flex items-center justify-center gap-2">
-          <div className="border border-[#E5E5E5] flex rounded-full py-1 px-2 gap-2 shadow-md">
+          <div className="border border-[#E5E5E5] flex rounded-full py-1 px-2 gap-2 shadow-md cursor-pointer">
             <p className="text-sm font-semibold text-active">
               Get more minutes
             </p>
