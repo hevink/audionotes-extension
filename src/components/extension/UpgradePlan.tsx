@@ -14,6 +14,7 @@ import {
   CheckIcon,
 } from "../../assets/icons/UpgradePlanIcons";
 import { Button } from "../ui/button";
+import { cn } from "../../lib/utils";
 
 const plansTitles = [
   {
@@ -80,7 +81,7 @@ const plansTitles = [
 
 const UpgradePlan = ({ setUpgradePlan }: any) => {
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4">
       {/* Header Section */}
       <div className="relative flex items-center justify-center">
         <div className="rounded-full absolute left-0">
@@ -99,26 +100,40 @@ const UpgradePlan = ({ setUpgradePlan }: any) => {
       </p>
 
       <div>
-        <div className="grid grid-cols-12 gap-4 mb-4">
+        <div className="grid grid-cols-12 gap-4">
           <div className="col-span-8"></div>
-          <div className="col-span-2 text-center font-semibold">FREE</div>
-          <div className="col-span-2 text-center font-semibold text-primary">
+          <div className="col-span-2 text-center font-semibold pb-4 pt-2">
+            FREE
+          </div>
+          <div className="col-span-2 text-center font-semibold text-primary bg-[#FFF0EA] pb-4 pt-2 rounded-t-2xl">
             PRO
           </div>
         </div>
       </div>
 
       <div className="">
-        <div className="col-span-4 space-y-4">
+        <div className="col-span-4">
           {plansTitles.map((list, i) => {
+            const isLastItem = i === plansTitles.length - 1;
             return (
-              <div key={i} className="grid grid-cols-12 gap-4 mb-4">
-                <div className="col-span-8 flex items-center gap-3">
-                  <div className="bg-[#FFF0EA] p-2 rounded-xl">{list.icon}</div>
-                  <span className="font-medium">{list.title}</span>
+              <div key={i} className="grid grid-cols-12 gap-4">
+                <div className="col-span-8 flex items-center gap-3 pb-2.5">
+                  <div className="bg-[#FFF0EA] p-2 rounded-xl">
+                    {list.icon}
+                  </div>
+                  <span className="font-semibold text-sm leading-5">
+                    {list.title}
+                  </span>
                 </div>
-                <div className="col-span-2 text-center">{list.modeType}</div>
-                <div className="col-span-2 text-center bg-red-100">
+                <div className="col-span-2 text-center  flex items-center justify-center pb-2.5">
+                  {list.modeType}
+                </div>
+                <div
+                  className={cn(
+                    "col-span-2 text-center bg-[#FFF0EA] flex items-center justify-center pb-2.5",
+                    isLastItem ? "rounded-b-2xl" : ""
+                  )}
+                >
                   {list.proMode}
                 </div>
               </div>
@@ -129,7 +144,7 @@ const UpgradePlan = ({ setUpgradePlan }: any) => {
 
       <Button
         size={"lg"}
-        className="flex items-center font-medium text-base leading-5 w-full bg-gradient-to-r from-[#FF4D00] to-[#FF2600] text-white"
+        className="flex items-center font-medium text-base mt-3 leading-5 w-full bg-gradient-to-r from-[#FF4D00] to-[#FF2600] text-white"
         variant={"primary"}
       >
         Upgrade to PRO
