@@ -19,8 +19,8 @@ export const MicIcon = () => {
 export const ImageIcon = () => {
   return (
     <svg
-      width="18"
-      height="18"
+      width="24"
+      height="24"
       viewBox="0 0 18 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -62,8 +62,8 @@ export const YoutubeIcon = () => {
 export const NoteIcon = () => {
   return (
     <svg
-      width="20"
-      height="20"
+      width="24"
+      height="24"
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -89,8 +89,8 @@ export const NoteIcon = () => {
 export const CustomGenerationIcon = () => {
   return (
     <svg
-      width="20"
-      height="20"
+      width="24"
+      height="24"
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -113,8 +113,8 @@ export const CustomGenerationIcon = () => {
 export const MindMapIcon = () => {
   return (
     <svg
-      width="20"
-      height="20"
+      width="24"
+      height="24"
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -203,8 +203,8 @@ export const WhatsAppIcon = () => {
 export const NotionIcon = () => {
   return (
     <svg
-      width="20"
-      height="20"
+      width="24"
+      height="24"
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -230,8 +230,8 @@ export const NotionIcon = () => {
 export const ZapierIcon = () => {
   return (
     <svg
-      width="20"
-      height="20"
+      width="24"
+      height="24"
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
