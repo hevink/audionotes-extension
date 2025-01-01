@@ -28,6 +28,11 @@ const RecentAudio = ({
     fetchAudioDevices();
   }, []);
 
+  // Function to clean device label by removing text in parentheses
+  const cleanDeviceLabel = (label: string) => {
+    return label.replace(/\s*\([^)]*\)/g, "").trim();
+  };
+
   const toggleDropdown = (e: any) => {
     e.stopPropagation();
     setIsOpen(!isOpen);
@@ -41,9 +46,9 @@ const RecentAudio = ({
       <div className="space-y-2">
         <div
           onClick={() => setShowLanguagesData("setShowLanguagesData")}
-          className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA]"
+          className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA] cursor-pointer"
         >
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-2 ">
             <InputLanguageIcon />
             <span className="text-gray-600 font-medium text-heading text-base">
               Input Language - Autodetect
@@ -51,21 +56,20 @@ const RecentAudio = ({
           </div>
 
           <div>
-            <ChevronRight
-              size={16}
-              color="#454545"
-              className="cursor-pointer"
-            />
+            <ChevronRight size={16} color="#454545" />
           </div>
         </div>
-        <div className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA]">
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={toggleDropdown}
-          >
+        <div
+          onClick={toggleDropdown}
+          className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA] cursor-pointer"
+        >
+          <div className="flex items-center gap-2 cursor-pointer">
             <HeadphoneIcon />
             <span className="text-gray-600 font-medium text-heading text-base">
-              Audio - {selectedAudioDevice?.label || "Select a device"}
+              Audio -{" "}
+              {selectedAudioDevice
+                ? cleanDeviceLabel(selectedAudioDevice.label)
+                : "Select a device"}
             </span>
           </div>
 
@@ -76,6 +80,7 @@ const RecentAudio = ({
             setIsOpen={setIsOpen}
             isOpen={isOpen}
             toggleDropdown={toggleDropdown}
+            cleanDeviceLabel={cleanDeviceLabel}
           />
         </div>
         <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA]">

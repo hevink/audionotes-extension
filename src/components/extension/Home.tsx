@@ -11,6 +11,30 @@ import RecordAudio from "./RecordAudio";
 import UpgradePlan from "./UpgradePlan";
 import { useAudioRecorder } from "react-audio-voice-recorder";
 
+// ----------------------------------------------------------------
+const recentFiles = [
+  {
+    id: 1,
+    title: "Designing Luck Through Hard Work",
+    date: "Aug 16, 2024",
+    time: "10:23 PM",
+    status: "completed",
+  },
+  {
+    id: 2,
+    title: "Designing Luck Through Hard Work",
+    date: "Aug 16, 2024",
+    time: "10:23 PM",
+    status: "completed",
+  },
+  {
+    id: 3,
+    title: "Processing Failed",
+    status: "failed",
+    message: "We're facing a delay. Your audio will be processed soon.",
+  },
+];
+
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("audio");
   const [sendMail, setSendMail] = useState("");
@@ -33,29 +57,6 @@ const HomePage = () => {
     togglePauseResume,
   } = useAudioRecorder();
 
-  const recentFiles = [
-    {
-      id: 1,
-      title: "Designing Luck Through Hard Work",
-      date: "Aug 16, 2024",
-      time: "10:23 PM",
-      status: "completed",
-    },
-    {
-      id: 2,
-      title: "Designing Luck Through Hard Work",
-      date: "Aug 16, 2024",
-      time: "10:23 PM",
-      status: "completed",
-    },
-    {
-      id: 3,
-      title: "Processing Failed",
-      status: "failed",
-      message: "We're facing a delay. Your audio will be processed soon.",
-    },
-  ];
-
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log(e);
@@ -73,16 +74,12 @@ const HomePage = () => {
 
   const handleStopRecording = useCallback(() => {
     if (recordingStarted && !recordingStopped) {
-      console.log("123");
-
       // Stop the recording if it was started and not already stopped
       stopRecording();
       setIsRecordingAllow(false);
       setFinalTime(recordingTime); // Save the last recorded time
       setRecordingStopped(true); // Mark recording as stopped
     } else {
-      console.log("098");
-
       // Restart recording if it was canceled or stopped
       handleStartRecording();
     }
