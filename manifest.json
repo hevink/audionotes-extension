@@ -4,11 +4,6 @@
   "version": "1.0.0",
   "action": { "default_popup": "index.html" },
   "description": "A Chrome extension for creating and managing audio notes.",
-  "host_permissions": [
-    "https://home.audionotes.app/*"
-  ],
-  "permissions": ["storage", "tabs", "activeTab", "cookies"],
-  "background": {
-    "service_worker": "src/background.js"
-  }
+  "host_permissions": ["https://home.audionotes.app/*"],
+  "permissions": ["storage", "tabs", "activeTab", "cookies"]
 }

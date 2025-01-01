@@ -9,31 +9,24 @@ import { LiveAudioVisualizer } from "react-audio-visualize";
 import { FormatTime } from "../../helper/formatTime";
 
 const RecordAudio = ({
-  startRecording,
   stopRecording,
   recordingTime,
-  isRecording,
+  recordingBlob,
   mediaRecorder,
   togglePauseResume,
-  recordingBlob,
+  isRecordingAllow,
+  finalTime,
+  recordingStopped,
+  setRecordingStopped,
+  setRecordingStarted,
+  handleStopRecording,
 }: any) => {
   const [recordingBlobState, setRecordingBlobState] = useState<Blob | null>(
     null
   );
-  const [isRecordingAllow, setIsRecordingAllow] = useState(true);
-
-  //   const handleStartRecording = useCallback(() => {
-  //     startRecording();
-  //   }, [startRecording]);
-
-  const handleStopRecording = useCallback(() => {
-    stopRecording();
-  }, [stopRecording]);
 
   const handleDownloadAudio = useCallback(() => {
     if (recordingBlobState) {
-      console.log("12312x");
-
       const url = URL.createObjectURL(recordingBlobState);
       const a = document.createElement("a");
       a.style.display = "none";
@@ -48,14 +41,10 @@ const RecordAudio = ({
 
   const handleCancelRecording = useCallback(() => {
     stopRecording();
+    setRecordingStarted(false); // Mark recording as not started
+    setRecordingStopped(false); // Reset stopped state
+    setRecordingBlobState(null); // Clear blob state
   }, [stopRecording]);
-
-  //   useEffect(() => {
-  //     const maxRecordingTime = 60;
-  //     if (isRecording && recordingTime >= maxRecordingTime) {
-  //       handleStopRecording();
-  //     }
-  //   }, [recordingTime, isRecording, handleStopRecording]);
 
   useEffect(() => {
     if (recordingBlob) {
@@ -94,7 +83,7 @@ const RecordAudio = ({
         </div>
       )}
       <div className="font-semibold text-2xl leading-5 text-center mt-5">
-        {FormatTime(recordingTime)} / 30:00
+        {FormatTime(recordingStopped ? finalTime : recordingTime)} / 30:00
       </div>
       <div className="mt-12 px-5">
         {isRecordingAllow ? (
@@ -114,13 +103,10 @@ const RecordAudio = ({
               size={"lg"}
               className="flex items-center font-medium text-base leading-5"
               variant={"primary"}
-              onClick={() => {
-                setIsRecordingAllow(false);
-                handleStopRecording();
-              }}
+              onClick={handleStopRecording}
             >
               <RecordIcon />
-              Stop recording
+              {recordingStopped ? "Start recording" : "Stop recording"}
             </Button>
             <div
               onClick={() => togglePauseResume()}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Card } from "../ui/card";
 import { FileText } from "lucide-react";
 import EmailShare from "./EmailShare";
@@ -18,15 +18,19 @@ const HomePage = () => {
   const [startRecordings, setStartRecordings] = useState("");
   const [upgradePlan, setUpgradePlan] = useState("");
 
+  //
+  const [isRecordingAllow, setIsRecordingAllow] = useState(true);
+  const [finalTime, setFinalTime] = useState<number>(0); // State to hold the final time
+  const [recordingStopped, setRecordingStopped] = useState(false); // State to track if recording is stopped
+  const [recordingStarted, setRecordingStarted] = useState(false); // State to track if recording has started
+
   const {
     startRecording,
     stopRecording,
     recordingTime,
     recordingBlob,
-    isRecording,
     mediaRecorder,
     togglePauseResume,
-    isPaused,
   } = useAudioRecorder();
 
   const recentFiles = [
@@ -61,6 +65,35 @@ const HomePage = () => {
     setActiveTab(tab);
   };
 
+  const handleStartRecording = useCallback(() => {
+    startRecording();
+    setRecordingStarted(true);
+    setRecordingStopped(false); // Reset stopped state
+  }, [startRecording]);
+
+  const handleStopRecording = useCallback(() => {
+    if (recordingStarted && !recordingStopped) {
+      console.log("123");
+
+      // Stop the recording if it was started and not already stopped
+      stopRecording();
+      setIsRecordingAllow(false);
+      setFinalTime(recordingTime); // Save the last recorded time
+      setRecordingStopped(true); // Mark recording as stopped
+    } else {
+      console.log("098");
+
+      // Restart recording if it was canceled or stopped
+      handleStartRecording();
+    }
+  }, [
+    stopRecording,
+    recordingTime,
+    recordingStarted,
+    recordingStopped,
+    handleStartRecording,
+  ]);
+
   return (
     <>
       <div className="bg-gray-100 flex items-center justify-center">
@@ -71,14 +104,17 @@ const HomePage = () => {
             <ShowLanguage setShowLanguagesData={setShowLanguagesData} />
           ) : startRecordings === "startRecordings" ? (
             <RecordAudio
-              startRecording={startRecording}
               stopRecording={stopRecording}
               recordingTime={recordingTime}
               recordingBlob={recordingBlob}
-              isRecording={isRecording}
               mediaRecorder={mediaRecorder}
               togglePauseResume={togglePauseResume}
-              isPaused={isPaused}
+              isRecordingAllow={isRecordingAllow}
+              finalTime={finalTime}
+              recordingStopped={recordingStopped}
+              setRecordingStopped={setRecordingStopped}
+              setRecordingStarted={setRecordingStarted}
+              handleStopRecording={handleStopRecording}
             />
           ) : upgradePlan === "upgradePlan" ? (
             <UpgradePlan setUpgradePlan={setUpgradePlan} />
@@ -117,7 +153,7 @@ const HomePage = () => {
                   handleSubmit={handleSubmit}
                   setShowLanguagesData={setShowLanguagesData}
                   setStartRecordings={setStartRecordings}
-                  startRecording={startRecording}
+                  handleStartRecording={handleStartRecording}
                 />
               ) : (
                 <RecentFile

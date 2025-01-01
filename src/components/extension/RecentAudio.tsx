@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputLanguageIcon from "../../assets/icons/InputLanguageIcon";
 import HeadphoneIcon from "../../assets/icons/HeadphoneIcon";
 import { ArrowRight, ChevronRight } from "lucide-react";
@@ -10,13 +10,23 @@ const RecentAudio = ({
   handleSubmit,
   setShowLanguagesData,
   setStartRecordings,
-  startRecording,
+  handleStartRecording,
 }: any) => {
-  const [selectedAudioDevice, setSelectedAudioDevice] = useState({
-    id: 1,
-    name: "MacBook Air Inbuilt",
-  });
+  const [selectedAudioDevice, setSelectedAudioDevice] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [audioDevices, setAudioDevices] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchAudioDevices = async () => {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const audioInputs = devices.filter(
+        (device) => device.kind === "audioinput"
+      );
+      setAudioDevices(audioInputs);
+    };
+
+    fetchAudioDevices();
+  }, []);
 
   const toggleDropdown = (e: any) => {
     e.stopPropagation();
@@ -55,11 +65,12 @@ const RecentAudio = ({
           >
             <HeadphoneIcon />
             <span className="text-gray-600 font-medium text-heading text-base">
-              Audio - {selectedAudioDevice.name}
+              Audio - {selectedAudioDevice?.label || "Select a device"}
             </span>
           </div>
 
           <AudioDropdown
+            audioDevices={audioDevices}
             selectedDevice={selectedAudioDevice}
             onDeviceSelect={setSelectedAudioDevice}
             setIsOpen={setIsOpen}
@@ -92,7 +103,7 @@ const RecentAudio = ({
           variant={"primary"}
           onClick={() => {
             setStartRecordings("startRecordings");
-            startRecording();
+            handleStartRecording();
           }}
         >
           <RecordIcon />

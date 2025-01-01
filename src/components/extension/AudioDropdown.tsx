@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import AudioDropdownIcon from "../../assets/icons/AudioDropdownIcon";
 
 const AudioDropdown = ({
+  audioDevices,
   selectedDevice,
   onDeviceSelect,
   setIsOpen,
@@ -10,11 +11,6 @@ const AudioDropdown = ({
   toggleDropdown,
 }: any) => {
   const dropdownRef = useRef<any>(null);
-
-  const audioDevices = [
-    { id: 1, name: "Macbook Air Inbuilt" },
-    { id: 2, name: "Oneplus X2 earphones" },
-  ];
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -36,9 +32,9 @@ const AudioDropdown = ({
 
       {isOpen && (
         <div className="absolute -right-6 mt-5 w-[350px] bg-white rounded-[22px] shadow-lg border border-gray-200 py-2 pb-1 z-50">
-          {audioDevices.map((device) => (
+          {audioDevices.map((device: any) => (
             <div
-              key={device.id}
+              key={device.deviceId}
               className={`flex items-center justify-between px-3 cursor-pointer`}
               onClick={() => {
                 onDeviceSelect(device);
@@ -47,15 +43,15 @@ const AudioDropdown = ({
             >
               <div
                 className={`flex items-center justify-between w-full px-4 py-3 ${
-                  selectedDevice?.id === device.id
+                  selectedDevice?.deviceId === device.deviceId
                     ? "bg-plain rounded-full"
                     : ""
                 }`}
               >
-                <span className="text-heading font-medium text-[15px] leading-5">
-                  {device.name}
+                <span className="text-heading font-medium text-[14px] leading-5">
+                  {device.label}
                 </span>
-                {selectedDevice?.id === device.id && (
+                {selectedDevice?.deviceId === device.deviceId && (
                   <Check size={18} className="text-primary" />
                 )}
               </div>
