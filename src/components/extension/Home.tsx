@@ -9,6 +9,7 @@ import RecentFile from "./RecentFile";
 import ShowLanguage from "./ShowLanguage";
 import RecordAudio from "./RecordAudio";
 import UpgradePlan from "./UpgradePlan";
+import { useAudioRecorder } from "react-audio-voice-recorder";
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("audio");
@@ -16,6 +17,17 @@ const HomePage = () => {
   const [showLanguagesData, setShowLanguagesData] = useState("");
   const [startRecordings, setStartRecordings] = useState("");
   const [upgradePlan, setUpgradePlan] = useState("");
+
+  const {
+    startRecording,
+    stopRecording,
+    recordingTime,
+    recordingBlob,
+    isRecording,
+    mediaRecorder,
+    togglePauseResume,
+    isPaused,
+  } = useAudioRecorder();
 
   const recentFiles = [
     {
@@ -58,7 +70,16 @@ const HomePage = () => {
           ) : showLanguagesData === "setShowLanguagesData" ? (
             <ShowLanguage setShowLanguagesData={setShowLanguagesData} />
           ) : startRecordings === "startRecordings" ? (
-            <RecordAudio />
+            <RecordAudio
+              startRecording={startRecording}
+              stopRecording={stopRecording}
+              recordingTime={recordingTime}
+              recordingBlob={recordingBlob}
+              isRecording={isRecording}
+              mediaRecorder={mediaRecorder}
+              togglePauseResume={togglePauseResume}
+              isPaused={isPaused}
+            />
           ) : upgradePlan === "upgradePlan" ? (
             <UpgradePlan setUpgradePlan={setUpgradePlan} />
           ) : (
@@ -96,6 +117,7 @@ const HomePage = () => {
                   handleSubmit={handleSubmit}
                   setShowLanguagesData={setShowLanguagesData}
                   setStartRecordings={setStartRecordings}
+                  startRecording={startRecording}
                 />
               ) : (
                 <RecentFile

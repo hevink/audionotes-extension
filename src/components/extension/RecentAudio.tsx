@@ -10,6 +10,7 @@ const RecentAudio = ({
   handleSubmit,
   setShowLanguagesData,
   setStartRecordings,
+  startRecording,
 }: any) => {
   const [selectedAudioDevice, setSelectedAudioDevice] = useState({
     id: 1,
@@ -89,7 +90,10 @@ const RecentAudio = ({
           size={"lg"}
           className="flex items-center font-medium text-base leading-5 w-full"
           variant={"primary"}
-          onClick={() => setStartRecordings("startRecordings")}
+          onClick={() => {
+            setStartRecordings("startRecordings");
+            startRecording();
+          }}
         >
           <RecordIcon />
           Stop recording
