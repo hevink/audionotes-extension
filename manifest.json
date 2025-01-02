@@ -9,12 +9,5 @@
     "http://*/*",
     "https://*/*"
   ],
-  "permissions": [
-    "storage",
-    "tabs",
-    "activeTab",
-    "cookies",
-    "audioCapture",
-    "fullscreen"
-  ]
+  "permissions": ["storage", "tabs", "activeTab", "cookies"]
 }

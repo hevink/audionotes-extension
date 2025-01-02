@@ -25,3 +25,22 @@ export const getUser = async () => {
     return { error: error };
   }
 };
+
+// Plan
+export const getUserPlan = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("plan:plans(*)")
+      .single();
+
+    if (error) {
+      throw error.message;
+    }
+
+    return { data: data.plan };
+  } catch (error) {
+    console.error("Error getting user plan:", error);
+    return { error: error };
+  }
+};
