@@ -1,66 +1,35 @@
-import { AlertCircle, Play, Send } from "lucide-react";
+import React from "react";
 import { Button } from "../ui/button";
 import RecordIcon from "../../assets/icons/RecordIcon";
+import RecentFileItem from "./RecentFileItem";
+import { useGetInitialNotes } from "../../queries";
 
-const RecentFile = ({
+type RecentFileProps = {
+  recentFiles: {
+    id: string;
+    status: string;
+    title: string;
+    date?: string;
+    time?: string;
+    message?: string;
+  }[];
+  setSendMail: (value: string) => void;
+  handleStartRecording: () => void;
+  setStartRecordings: (value: string) => void;
+};
+
+const RecentFile: React.FC<RecentFileProps> = ({
   recentFiles,
   setSendMail,
   handleStartRecording,
   setStartRecordings,
-}: any) => {
+}) => {
+  const { data: notes = [], isPending: isInitialLoading } =
+    useGetInitialNotes();
   return (
     <div className="space-y-4 px-4 pb-4">
-      {recentFiles.map((file: any) => (
-        <div key={file.id} className="space-y-2">
-          {file.status === "completed" ? (
-            <div>
-              <div className="flex gap-3">
-                <div>
-                  <button className="text-gray-600 hover:text-gray-800">
-                    <Play className="w-5 h-5" fill="#212121" />
-                  </button>
-                </div>
-
-                <div className="space-y-2">
-                  <p className="text-gray-800 text-base font-medium">
-                    {file.title}
-                  </p>
-
-                  <p className="flex items-center gap-2 text-date text-sm font-medium">
-                    {file.date} · {file.time}
-                  </p>
-
-                  <div className="flex items-center space-x-2">
-                    <div className="px-3 py-2 rounded-full text-heading text-xs font-semibold bg-[#F3F3F3] cursor-pointer">
-                      Transcript
-                    </div>
-                    <div className="px-3 py-2 rounded-full text-heading text-xs font-semibold bg-[#F3F3F3] cursor-pointer">
-                      Summary
-                    </div>
-                    <div
-                      className="flex items-center space-x-1 px-3 py-2 rounded-full text-xs text-heading font-semibold whitespace-nowrap bg-[#F3F3F3] cursor-pointer"
-                      onClick={() => setSendMail("showDetails")}
-                    >
-                      <Send size={15} />
-                      <span>Share via Email</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="border-[1px] border-[#F1F5FA] mt-2" />
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-red-500">
-                <div className="bg-plain rounded-full p-1">
-                  <AlertCircle className="w-5 h-5 text-white" fill="#FF3300" />
-                </div>
-                <span className="font-medium text-base">{file.title}</span>
-              </div>
-              <p className="text-date ml-7 text-sm">{file.message}</p>
-            </div>
-          )}
-        </div>
+      {notes.map((note) => (
+        <RecentFileItem key={note.id} note={note} setSendMail={setSendMail} />
       ))}
 
       <div className="space-y-2">
