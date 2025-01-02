@@ -2,7 +2,12 @@ import { AlertCircle, Play, Send } from "lucide-react";
 import { Button } from "../ui/button";
 import RecordIcon from "../../assets/icons/RecordIcon";
 
-const RecentFile = ({ recentFiles, setSendMail }: any) => {
+const RecentFile = ({
+  recentFiles,
+  setSendMail,
+  handleStartRecording,
+  setStartRecordings,
+}: any) => {
   return (
     <div className="space-y-4 px-4 pb-4">
       {recentFiles.map((file: any) => (
@@ -67,9 +72,13 @@ const RecentFile = ({ recentFiles, setSendMail }: any) => {
           size={"lg"}
           className="flex items-center font-medium text-base leading-5 w-full"
           variant={"primary"}
+          onClick={() => {
+            setStartRecordings("startRecordings");
+            handleStartRecording();
+          }}
         >
           <RecordIcon />
-          Stop recording
+          Start recording
         </Button>
       </div>
     </div>

@@ -17,7 +17,10 @@ const Header = ({ setUpgradePlan }: any) => {
       </button>
 
       {/* For My account ... */}
-      {/* <button className="bg-[#F8F8F8] text-foreground px-3 py-1 rounded-full font-semibold text-sm">
+      {/* <button
+        onClick={() => window.open("https://home.audionotes.app/", "_blank")}
+        className="bg-[#F8F8F8] text-foreground px-3 py-1 rounded-full font-semibold text-sm"
+      >
         My Account
       </button> */}
     </div>

@@ -48,6 +48,11 @@ const HomePage = () => {
   const [recordingStopped, setRecordingStopped] = useState(false); // State to track if recording is stopped
   const [recordingStarted, setRecordingStarted] = useState(false); // State to track if recording has started
 
+  //
+  const [isAudioPending, setIsAudioPending] = useState(false);
+  const [isTextPending, setIsTextPending] = useState(false);
+  console.log(isAudioPending, isTextPending);
+
   const {
     startRecording,
     stopRecording,
@@ -91,6 +96,17 @@ const HomePage = () => {
     handleStartRecording,
   ]);
 
+  const handlePending = useCallback(
+    (type: "text" | "audio", value: boolean) => {
+      if (type === "text") {
+        setIsTextPending(value);
+      } else {
+        setIsAudioPending(value);
+      }
+    },
+    []
+  );
+
   return (
     <>
       <div className="bg-gray-100 flex items-center justify-center">
@@ -112,6 +128,9 @@ const HomePage = () => {
               setRecordingStopped={setRecordingStopped}
               setRecordingStarted={setRecordingStarted}
               handleStopRecording={handleStopRecording}
+              handlePending={handlePending}
+              setActiveTab={setActiveTab}
+              setStartRecordings={setStartRecordings}
             />
           ) : upgradePlan === "upgradePlan" ? (
             <UpgradePlan setUpgradePlan={setUpgradePlan} />
@@ -156,6 +175,8 @@ const HomePage = () => {
                 <RecentFile
                   recentFiles={recentFiles}
                   setSendMail={setSendMail}
+                  handleStartRecording={handleStartRecording}
+                  setStartRecordings={setStartRecordings}
                 />
                 // <AuthScreen />
               )}

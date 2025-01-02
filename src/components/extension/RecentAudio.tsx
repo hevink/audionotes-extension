@@ -106,13 +106,14 @@ const RecentAudio = ({
           size={"lg"}
           className="flex items-center font-medium text-base leading-5 w-full"
           variant={"primary"}
+          id="start"
           onClick={() => {
             setStartRecordings("startRecordings");
             handleStartRecording();
           }}
         >
           <RecordIcon />
-          Stop recording
+          Start recording
         </Button>
       </div>
     </form>

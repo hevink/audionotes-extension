@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Download, LoaderCircle, X } from "lucide-react";
+import { ArrowLeft, Download, LoaderCircle, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import RightArrowIcon from "../../assets/icons/RightArrowIcon";
@@ -7,6 +7,8 @@ import PauseIcon from "../../assets/icons/PauseIcon";
 import RecordIcon from "../../assets/icons/RecordIcon";
 import { LiveAudioVisualizer } from "react-audio-visualize";
 import { FormatTime } from "../../helper/formatTime";
+import * as tus from "tus-js-client";
+import supabase from "../../lib/supabase/client";
 
 const RecordAudio = ({
   stopRecording,
@@ -20,9 +22,135 @@ const RecordAudio = ({
   setRecordingStopped,
   setRecordingStarted,
   handleStopRecording,
+  handlePending,
+  setActiveTab,
+  setStartRecordings,
 }: any) => {
   const [recordingBlobState, setRecordingBlobState] = useState<Blob | null>(
     null
+  );
+  const [status, setStatus] = useState("");
+  const [audioUrl, setAudioUrl] = useState<string>();
+  console.log(audioUrl, "audioUrl");
+  console.log(status, "status");
+
+  const bufferToHex = (buffer: Uint8Array): string => {
+    return Array.from(buffer)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  };
+
+  const randomBytes = (size: number): string => {
+    const bytes = window.crypto.getRandomValues(new Uint8Array(size));
+    return bufferToHex(bytes);
+  };
+
+  const handleFileUpload = useCallback(
+    async (blob: Blob | File, type: "image" | "audio") => {
+      console.log("000");
+
+      try {
+        console.log(123);
+
+        if (!blob) {
+          throw new Error(
+            type === "audio"
+              ? "Please select or record an audio"
+              : "Please select an image"
+          );
+        }
+
+        // Get fresh session before upload
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
+        if (sessionError || !session) {
+          throw new Error("Authentication required");
+        }
+
+        let key =
+          type === "image" ? `image_${randomBytes(20)}` : randomBytes(20);
+
+        if (blob.type.includes("webm")) {
+          key = `${key}.webm`;
+        } else if (blob.type.includes("mp4")) {
+          key = `${key}.mp4`;
+        }
+
+        new Promise<void>((resolve, reject) => {
+          const upload = new tus.Upload(blob, {
+            endpoint: `${
+              import.meta.env.VITE_SUPABASE_URL
+            }/storage/v1/upload/resumable`,
+            retryDelays: [0, 3000, 5000, 10000, 20000],
+            headers: {
+              authorization: `Bearer ${session.access_token}`,
+              "x-upsert": "true",
+            },
+            uploadDataDuringCreation: true,
+            removeFingerprintOnSuccess: true,
+            metadata: {
+              bucketName: process.env.NEXT_PUBLIC_SUPABASE_BUCKET!,
+              objectName: key,
+              contentType: blob.type,
+              cacheControl: "3600",
+            },
+            chunkSize: 6 * 1024 * 1024, // NOTE: it must be set to 6MB (for now) do not change it
+            onError: (error: any) => {
+              console.error("Failed because: " + error);
+              reject(error);
+            },
+            onProgress: (bytesUploaded, bytesTotal) => {
+              const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(
+                2
+              );
+              setStatus(`Uploading ${percentage}%`);
+            },
+            onSuccess: () => {
+              const publicUrl = `${
+                import.meta.env.VITE_SUPABASE_URL
+              }/storage/v1/object/public/audionotes_app/${key}`;
+              setAudioUrl(publicUrl);
+              setStatus("Generating notes...");
+              resolve();
+            },
+          });
+          console.log(upload, "upload");
+
+          // Check if there are any previous uploads to continue.
+          return upload.findPreviousUploads().then((previousUploads) => {
+            // Found previous uploads so we select the first one.
+            if (previousUploads.length) {
+              upload.resumeFromPreviousUpload(previousUploads[0]);
+            }
+
+            // Start the upload
+            upload.start();
+          });
+        });
+      } catch (err) {
+        console.log(7687);
+
+        handlePending("audio", false);
+        setStatus("Generation failed");
+        // errorToast(`${err}`);
+        console.log(err, "err");
+      } finally {
+        setStatus("");
+      }
+    },
+    [handlePending]
+  );
+
+  // Memoize handleRecording with an extra step to control repetitive calls.
+  const stableHandleRecording = useCallback(
+    async (blob: Blob) => {
+      handlePending("audio", true);
+      await handleFileUpload(blob, "audio");
+    },
+    [handleFileUpload, handlePending]
   );
 
   const handleDownloadAudio = useCallback(() => {
@@ -52,11 +180,37 @@ const RecordAudio = ({
     }
   }, [recordingBlob]);
 
+  useEffect(() => {
+    if (recordingBlobState) {
+      handlePending("audio", true);
+      stableHandleRecording(recordingBlobState);
+    }
+  }, [
+    recordingBlobState,
+    handlePending,
+    stableHandleRecording,
+    handleFileUpload,
+  ]);
+
   return (
     <div className="p-5">
-      <div className="text-foreground font-semibold text-center leading-5 mb-3">
-        Recording Audio
+      <div className="relative flex items-center justify-center mb-3">
+        <div className="rounded-full absolute left-0">
+          <div
+            onClick={() => {
+              setStartRecordings("");
+              setActiveTab("files");
+            }}
+            className="bg-plain rounded-full p-1 cursor-pointer"
+          >
+            <ArrowLeft className="h-5 w-5 text-subheading" />
+          </div>
+        </div>
+        <p className="text-foreground font-semibold text-center leading-5 flex items-center">
+          Recording Audio
+        </p>
       </div>
+
       <div className="flex items-center justify-center mb-8">
         <Badge
           variant="primary"
