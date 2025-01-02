@@ -44,3 +44,16 @@ export const getUserPlan = async () => {
     return { error: error };
   }
 };
+
+export const getLanguages = async () => {
+  try {
+    const { data, error } = await supabase.from("languages").select();
+    if (error) {
+      throw error.message;
+    }
+    return { data: data };
+  } catch (error) {
+    console.error("Error getting languages:", error);
+    return { error: error };
+  }
+};

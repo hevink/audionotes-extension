@@ -12,10 +12,11 @@ import PauseIcon from "../../assets/icons/PauseIcon";
 import RecordIcon from "../../assets/icons/RecordIcon";
 // APIs ...
 import supabase from "../../lib/supabase/client";
-import { createNote } from "../../queries";
+import { createNote, useGetUserPlan } from "../../queries";
 // Helper functions ...
 import { randomBytes } from "../../helper/makeUrl";
 import { FormatTime } from "../../helper/formatTime";
+import { formatTime } from "../../lib/utils";
 
 interface RecorderProps {
   stopRecording: () => void;
@@ -66,6 +67,7 @@ const RecordAudio = ({
   const [youtubeUrl, setYoutubeUrl] = useState<string>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [accessToken, setAccessToken] = useState<string | undefined>("");
+  const { data: plan } = useGetUserPlan() as any;
 
   const user = async () => {
     const { data } = await supabase.auth.getSession();
@@ -324,7 +326,11 @@ const RecordAudio = ({
         </div>
       )}
       <div className="font-semibold text-2xl leading-5 text-center mt-5">
-        {FormatTime(recordingStopped ? finalTime : recordingTime)} / 30:00
+        {formatTime(recordingTime, (plan?.recording_time ?? 60) >= 3600)} /{" "}
+        {formatTime(
+          plan?.recording_time || 60,
+          (plan?.recording_time ?? 60) >= 3600
+        )}
       </div>
       <div className="mt-12 px-5">
         {isRecordingAllow ? (

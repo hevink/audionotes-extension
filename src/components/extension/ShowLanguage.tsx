@@ -1,20 +1,14 @@
 import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
-
-const languages = [
-  { id: 1, name: "Autodetect" },
-  { id: 2, name: "English (US)" },
-  { id: 3, name: "English (UK)" },
-  { id: 4, name: "French" },
-  { id: 5, name: "German" },
-  { id: 6, name: "Hindi" },
-  { id: 7, name: "Chinese (Mandarin)" },
-];
+import { useGetLanguages } from "../../queries";
 
 const ShowLanguage = ({ setShowLanguagesData }: any) => {
+  const { data: languages = [], isLoading } = useGetLanguages();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+
+  if (isLoading) return <div>Loading...</div>;
 
   const handleKeyDown = (e: any) => {
     switch (e.key) {

@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { getUser, getUserPlan } from "./action";
+import { getLanguages, getUser, getUserPlan } from "./action";
 import axios from "axios";
 import { PartialTypeNote } from "./lib/types";
 import supabase from "./lib/supabase/client";
@@ -120,5 +120,21 @@ export const useGetInitialNotes = (): UseQueryResult<PartialTypeNote[]> => {
     },
     staleTime: STALE_TIME,
     gcTime: STALE_TIME,
+  });
+};
+
+export const useGetLanguages = () => {
+  return useQuery({
+    queryKey: ["languages"],
+    queryFn: async () => {
+      const { data, error } = await getLanguages();
+      if (error) {
+        // errorToast(`${error}`);
+        console.error("Error getting languages:", error);
+        return [];
+      }
+      return data || [];
+    },
+    staleTime: STALE_TIME,
   });
 };
