@@ -5,21 +5,12 @@ import RecentFileItem from "./RecentFileItem";
 import { useGetInitialNotes } from "../../queries";
 
 type RecentFileProps = {
-  recentFiles: {
-    id: string;
-    status: string;
-    title: string;
-    date?: string;
-    time?: string;
-    message?: string;
-  }[];
   setSendMail: (value: string) => void;
   handleStartRecording: () => void;
   setStartRecordings: (value: string) => void;
 };
 
 const RecentFile: React.FC<RecentFileProps> = ({
-  recentFiles,
   setSendMail,
   handleStartRecording,
   setStartRecordings,

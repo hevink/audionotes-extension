@@ -12,28 +12,6 @@ import UpgradePlan from "./UpgradePlan";
 import { useAudioRecorder } from "react-audio-voice-recorder";
 
 // ----------------------------------------------------------------
-const recentFiles = [
-  {
-    id: 1,
-    title: "Designing Luck Through Hard Work",
-    date: "Aug 16, 2024",
-    time: "10:23 PM",
-    status: "completed",
-  },
-  {
-    id: 2,
-    title: "Designing Luck Through Hard Work",
-    date: "Aug 16, 2024",
-    time: "10:23 PM",
-    status: "completed",
-  },
-  {
-    id: 3,
-    title: "Processing Failed",
-    status: "failed",
-    message: "We're facing a delay. Your audio will be processed soon.",
-  },
-];
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("audio");
@@ -174,7 +152,6 @@ const HomePage = () => {
                 />
               ) : (
                 <RecentFile
-                  recentFiles={recentFiles}
                   setSendMail={setSendMail}
                   handleStartRecording={handleStartRecording}
                   setStartRecordings={setStartRecordings}
