@@ -5,7 +5,7 @@ const Header = ({ setUpgradePlan }: any) => {
         <div className="bg-primary p-1 rounded-lg">
           <img src="/logo.png" alt="logo" className="w-5 h-5" />
         </div>
-        <h1 className="text-sm font-semibold">
+        <h1 className="font-semibold text-base">
           Audionotes<span className="text-primary">.app</span>
         </h1>
       </div>

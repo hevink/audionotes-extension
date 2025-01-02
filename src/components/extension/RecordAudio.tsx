@@ -1,14 +1,40 @@
+//
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Download, LoaderCircle, X } from "lucide-react";
+import * as tus from "tus-js-client";
+import { LiveAudioVisualizer } from "react-audio-visualize";
+// Components ...
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+// Icons ...
 import RightArrowIcon from "../../assets/icons/RightArrowIcon";
 import PauseIcon from "../../assets/icons/PauseIcon";
 import RecordIcon from "../../assets/icons/RecordIcon";
-import { LiveAudioVisualizer } from "react-audio-visualize";
-import { FormatTime } from "../../helper/formatTime";
-import * as tus from "tus-js-client";
+// APIs ...
 import supabase from "../../lib/supabase/client";
+import { createNote } from "../../queries";
+// Helper functions ...
+import { randomBytes } from "../../helper/makeUrl";
+import { FormatTime } from "../../helper/formatTime";
+
+interface RecorderProps {
+  stopRecording: () => void;
+  recordingTime: number;
+  recordingBlob?: Blob;
+  mediaRecorder?: MediaRecorder;
+  togglePauseResume: () => void;
+  isRecordingAllow: boolean;
+  finalTime: number;
+  recordingStopped: boolean;
+  setRecordingStopped: (value: boolean) => void;
+  setRecordingStarted: (value: boolean) => void;
+  handleStopRecording: () => void;
+  handlePending: (type: "text" | "audio", value: boolean) => void;
+  setActiveTab: (tab: string) => void;
+  setStartRecordings: (recording: string) => void;
+  isAudioPending: boolean;
+  isTextPending: boolean;
+}
 
 const RecordAudio = ({
   stopRecording,
@@ -25,33 +51,31 @@ const RecordAudio = ({
   handlePending,
   setActiveTab,
   setStartRecordings,
-}: any) => {
+  isAudioPending,
+  isTextPending,
+}: RecorderProps) => {
   const [recordingBlobState, setRecordingBlobState] = useState<Blob | null>(
     null
   );
   const [status, setStatus] = useState("");
   const [audioUrl, setAudioUrl] = useState<string>();
-  console.log(audioUrl, "audioUrl");
-  console.log(status, "status");
+  const [noteType, setNoteType] = useState<
+    "audio" | "upload" | "text" | "youtube" | "image"
+  >("audio");
+  const [inputText, setInputText] = useState<string>();
+  const [youtubeUrl, setYoutubeUrl] = useState<string>();
+  const [imageUrl, setImageUrl] = useState<string>();
+  const [accessToken, setAccessToken] = useState<string | undefined>("");
 
-  const bufferToHex = (buffer: Uint8Array): string => {
-    return Array.from(buffer)
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  };
-
-  const randomBytes = (size: number): string => {
-    const bytes = window.crypto.getRandomValues(new Uint8Array(size));
-    return bufferToHex(bytes);
+  const user = async () => {
+    const { data } = await supabase.auth.getSession();
+    setAccessToken(data?.session?.access_token);
+    return data;
   };
 
   const handleFileUpload = useCallback(
     async (blob: Blob | File, type: "image" | "audio") => {
-      console.log("000");
-
       try {
-        console.log(123);
-
         if (!blob) {
           throw new Error(
             type === "audio"
@@ -92,7 +116,7 @@ const RecordAudio = ({
             uploadDataDuringCreation: true,
             removeFingerprintOnSuccess: true,
             metadata: {
-              bucketName: process.env.NEXT_PUBLIC_SUPABASE_BUCKET!,
+              bucketName: import.meta.env.VITE_SUPABASE_BUCKET!,
               objectName: key,
               contentType: blob.type,
               cacheControl: "3600",
@@ -131,8 +155,6 @@ const RecordAudio = ({
           });
         });
       } catch (err) {
-        console.log(7687);
-
         handlePending("audio", false);
         setStatus("Generation failed");
         // errorToast(`${err}`);
@@ -174,6 +196,67 @@ const RecordAudio = ({
     setRecordingBlobState(null); // Clear blob state
   }, [stopRecording]);
 
+  const sendNoteToAPI = useCallback(async () => {
+    if (!accessToken) {
+      // errorToast("Authentication error. Please try logging in again.");
+      handlePending("audio", false);
+      handlePending("text", false);
+      return;
+    }
+
+    if (
+      (noteType === "upload" || noteType === "audio" || noteType == "image") &&
+      !audioUrl
+    ) {
+      return;
+    }
+
+    if (noteType === "youtube") {
+      setStatus("Processing Youtube video...");
+    }
+
+    if (noteType === "text" && !inputText) {
+      return;
+    }
+
+    const { error } = await createNote({
+      noteType,
+      audioUrl,
+      youtubeUrl,
+      imageUrl,
+      text: inputText,
+      audioFilename: audioUrl?.split("/").pop() || "",
+      device: navigator?.userAgent ?? "Web",
+      accessToken,
+    });
+
+    if (error) {
+      console.error("Error sending note to API:", error);
+    }
+
+    handlePending("audio", false);
+    handlePending("text", false);
+    setNoteType("audio");
+    setAudioUrl(undefined);
+    setYoutubeUrl(undefined);
+    setInputText(undefined);
+    setImageUrl(undefined);
+    setRecordingBlobState(null);
+    setStatus("");
+  }, [
+    noteType,
+    audioUrl,
+    imageUrl,
+    youtubeUrl,
+    inputText,
+    accessToken,
+    handlePending,
+  ]);
+
+  useEffect(() => {
+    sendNoteToAPI();
+  }, [audioUrl, inputText, youtubeUrl, sendNoteToAPI]);
+
   useEffect(() => {
     if (recordingBlob) {
       setRecordingBlobState(recordingBlob);
@@ -191,6 +274,10 @@ const RecordAudio = ({
     stableHandleRecording,
     handleFileUpload,
   ]);
+
+  useEffect(() => {
+    user();
+  }, [accessToken]);
 
   return (
     <div className="p-5">
@@ -276,10 +363,12 @@ const RecordAudio = ({
           </div>
         ) : (
           <div className="space-y-2">
-            <Button variant="transparent" size="lg" className="gap-1.5">
-              <LoaderCircle className="animate-spin size-4" />
-              Uploading Audio
-            </Button>
+            {(isAudioPending || isTextPending) && (
+              <Button variant="transparent" size="lg" className="gap-1.5">
+                <LoaderCircle className="animate-spin size-4" />
+                {status}
+              </Button>
+            )}
             <Button
               onClick={() => handleDownloadAudio()}
               variant={"secondary"}

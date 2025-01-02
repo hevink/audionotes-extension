@@ -9,5 +9,5 @@
     "http://*/*",
     "https://*/*"
   ],
-  "permissions": ["storage", "tabs", "activeTab", "cookies"]
+  "permissions": ["storage", "tabs", "activeTab", "cookies", "tabCapture"]
 }

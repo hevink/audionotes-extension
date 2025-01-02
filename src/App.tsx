@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import HomePage from "./components/extension/Home";
 import supabase from "./lib/supabase/client";
 
@@ -68,88 +68,14 @@ const handleAuthorization = async () => {
 
 const App = () => {
   useEffect(() => {
-    const getUserPermission = (): Promise<void> => {
-      return new Promise((resolve, reject) => {
-        // Using navigator.mediaDevices.getUserMedia to request microphone access
-        navigator.mediaDevices
-          .getUserMedia({ audio: true })
-          .then((stream) => {
-            // Permission granted, handle the stream if needed
-            console.log("Microphone access granted");
-
-            // Stop the tracks to prevent the recording indicator from being shown
-            stream.getTracks().forEach((track) => track.stop());
-
-            resolve();
-          })
-          .catch((error) => {
-            console.error("Error requesting microphone permission", error);
-
-            reject(error);
-          });
-      });
-    };
-
-    // Call the function to request microphone permission
-    getUserPermission();
-
     handleAuthorization();
   }, []);
 
-  // navigator.mediaDevices
-  //   .getUserMedia({ audio: true })
-  //   .then((stream) => {
-  //     console.log("Microphone access granted");
-  //     // Do something with the audio stream
-  //     const audioTracks = stream.getAudioTracks();
-  //     console.log("Audio tracks: ", audioTracks);
-  //   })
-  //   .catch((error) => {
-  //     console.error("Microphone access denied", error);
-  //   });
-
-  // const { stream, error } = useMicrophone();
-
   return (
     <div className="w-96">
-      {/* <h1>Microphone Access</h1>
-      {error ? (
-        <p style={{ color: "red" }}>Error: {error}</p>
-      ) : stream ? (
-        <p>Microphone is active. Stream ID: {stream.id}</p>
-      ) : (
-        <p>Requesting microphone access...</p>
-      )} */}
       <HomePage />
     </div>
   );
 };
 
 export default App;
-
-const useMicrophone = () => {
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((audioStream) => {
-        console.log("Microphone access granted");
-        setStream(audioStream);
-      })
-      .catch((err) => {
-        console.error("Microphone access denied", err);
-        setError(err.message);
-      });
-
-    // Clean up the audio stream when the component unmounts
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, []);
-
-  return { stream, error };
-};

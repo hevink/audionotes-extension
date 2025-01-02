@@ -22,7 +22,9 @@ const RecentFile = ({
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-gray-800 font-medium">{file.title}</p>
+                  <p className="text-gray-800 text-base font-medium">
+                    {file.title}
+                  </p>
 
                   <p className="flex items-center gap-2 text-date text-sm font-medium">
                     {file.date} · {file.time}
@@ -53,9 +55,9 @@ const RecentFile = ({
                 <div className="bg-plain rounded-full p-1">
                   <AlertCircle className="w-5 h-5 text-white" fill="#FF3300" />
                 </div>
-                <span className="font-medium">{file.title}</span>
+                <span className="font-medium text-base">{file.title}</span>
               </div>
-              <p className="text-date ml-7">{file.message}</p>
+              <p className="text-date ml-7 text-sm">{file.message}</p>
             </div>
           )}
         </div>

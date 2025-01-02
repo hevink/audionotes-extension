@@ -51,7 +51,6 @@ const HomePage = () => {
   //
   const [isAudioPending, setIsAudioPending] = useState(false);
   const [isTextPending, setIsTextPending] = useState(false);
-  console.log(isAudioPending, isTextPending);
 
   const {
     startRecording,
@@ -131,6 +130,8 @@ const HomePage = () => {
               handlePending={handlePending}
               setActiveTab={setActiveTab}
               setStartRecordings={setStartRecordings}
+              isTextPending={isTextPending}
+              isAudioPending={isAudioPending}
             />
           ) : upgradePlan === "upgradePlan" ? (
             <UpgradePlan setUpgradePlan={setUpgradePlan} />
@@ -142,7 +143,7 @@ const HomePage = () => {
               {/* Tabs */}
               <div className="flex mb-6">
                 <button
-                  className={`flex-1 font-medium transition-colors p-4 ${
+                  className={`flex-1 font-medium transition-colors text-base p-4 ${
                     activeTab === "audio"
                       ? "border-b-2 border-orange-500 text-gray-900"
                       : "border-b-2 border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
@@ -152,7 +153,7 @@ const HomePage = () => {
                   Record Audio
                 </button>
                 <button
-                  className={`flex-1 flex items-center justify-center gap-2 transition-colors p-4 ${
+                  className={`flex-1 flex items-center justify-center gap-2 text-base transition-colors p-4 ${
                     activeTab === "files"
                       ? "border-b-2 border-orange-500 text-gray-900"
                       : "border-b-2 border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
