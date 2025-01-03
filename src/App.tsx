@@ -1,24 +1,21 @@
+import { useEffect } from "react";
 import HomePage from "./components/extension/Home";
 import { useIsAuthenticated } from "./lib/auth";
-import { Loader2 } from "lucide-react";
 
 const App = () => {
-  const isAuthenticated = useIsAuthenticated();
+  const isAuthenticated: any = useIsAuthenticated();
 
-  if (isAuthenticated === null) {
-    return (
-      <div>
-        <Loader2 size={32} className="animate-spin" />
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      sessionStorage.setItem("isFirstTimeLogin", "true");
+    } else {
+      sessionStorage.setItem("isFirstTimeLogin", "false");
+    }
+  }, [isAuthenticated]);
 
-  if (!isAuthenticated) {
-    return <div>Please log in to continue.</div>; // Display fallback for unauthenticated users
-  }
   return (
     <div className="w-96">
-      <HomePage />
+      <HomePage isAuthentications={isAuthenticated} />
     </div>
   );
 };

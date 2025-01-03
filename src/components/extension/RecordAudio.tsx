@@ -15,7 +15,6 @@ import supabase from "../../lib/supabase/client";
 import { createNote, useGetUserPlan } from "../../queries";
 // Helper functions ...
 import { randomBytes } from "../../helper/makeUrl";
-import { FormatTime } from "../../helper/formatTime";
 import { formatTime } from "../../lib/utils";
 
 interface RecorderProps {
@@ -35,6 +34,9 @@ interface RecorderProps {
   setStartRecordings: (recording: string) => void;
   isAudioPending: boolean;
   isTextPending: boolean;
+  setUpgradePlan: (upgradePlan: string) => void;
+  setUpgradeToProScreen: (upgradePlan: string) => void;
+  setIsRecordingAllow: (value: boolean) => void;
 }
 
 const RecordAudio = ({
@@ -54,10 +56,14 @@ const RecordAudio = ({
   setStartRecordings,
   isAudioPending,
   isTextPending,
+  setUpgradePlan,
+  setUpgradeToProScreen,
+  setIsRecordingAllow,
 }: RecorderProps) => {
   const [recordingBlobState, setRecordingBlobState] = useState<Blob | null>(
     null
   );
+
   const [status, setStatus] = useState("");
   const [audioUrl, setAudioUrl] = useState<string>();
   const [noteType, setNoteType] = useState<
@@ -143,7 +149,6 @@ const RecordAudio = ({
               resolve();
             },
           });
-          console.log(upload, "upload");
 
           // Check if there are any previous uploads to continue.
           return upload.findPreviousUploads().then((previousUploads) => {
@@ -232,6 +237,26 @@ const RecordAudio = ({
       accessToken,
     });
 
+    if (plan?.plan === "pro") {
+      setActiveTab("files");
+      setStartRecordings("");
+      handleStopRecording();
+      stopRecording();
+      setIsRecordingAllow(false);
+    } else if (plan?.plan === "free") {
+      setUpgradePlan("upgradePlan");
+      setStartRecordings("");
+      handleStopRecording();
+      stopRecording();
+      setIsRecordingAllow(false);
+    } else if (plan?.plan === "personal") {
+      setUpgradeToProScreen("proScreen");
+      setStartRecordings("");
+      handleStopRecording();
+      stopRecording();
+      setIsRecordingAllow(false);
+    }
+
     if (error) {
       console.error("Error sending note to API:", error);
     }
@@ -243,7 +268,6 @@ const RecordAudio = ({
     setYoutubeUrl(undefined);
     setInputText(undefined);
     setImageUrl(undefined);
-    setRecordingBlobState(null);
     setStatus("");
   }, [
     noteType,

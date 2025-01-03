@@ -41,7 +41,7 @@ const AudioDropdown = ({
             filteredDevices.map((device: any) => (
               <div
                 key={device.deviceId}
-                className="flex items-center justify-between px-3 cursor-pointer"
+                className="flex items-center justify-between px-3 pb-1 cursor-pointer"
                 onClick={() => {
                   onDeviceSelect(device);
                   setIsOpen(false);

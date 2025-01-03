@@ -5,13 +5,20 @@ import { ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import RecordIcon from "../../assets/icons/RecordIcon";
 import AudioDropdown from "./AudioDropdown";
+import { useGetUserPlan } from "../../queries";
+import { PrimaryArrowIcon } from "../../assets/icons/LeftArrowIcon";
 
 const RecentAudio = ({
   handleSubmit,
   setShowLanguagesData,
   setStartRecordings,
   handleStartRecording,
+  isAuthentications,
+  setUpgradeToProScreen,
+  isLogin,
 }: any) => {
+  const { data: userPlan } = useGetUserPlan() as any;
+
   const [selectedAudioDevice, setSelectedAudioDevice] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [audioDevices, setAudioDevices] = useState<any>([]);
@@ -93,12 +100,12 @@ const RecentAudio = ({
 
       <div className="space-y-2 mt-16">
         <div className="flex items-center justify-center gap-2">
-          <div className="border border-[#E5E5E5] flex rounded-full py-1 px-2 gap-2 shadow-md cursor-pointer">
-            <p className="text-sm font-semibold text-active">
+          <div className="border border-[#E5E5E5] flex rounded-full py-1 px-2 gap-2 shadow-sm cursor-pointer">
+            <p className="text-xs font-semibold text-active">
               Get more minutes
             </p>
-            <div className="bg-primary rounded-full p-1">
-              <ArrowRight size={13} className="text-white" />
+            <div className="flex items-center">
+              <PrimaryArrowIcon />
             </div>
           </div>
         </div>
@@ -108,8 +115,17 @@ const RecentAudio = ({
           variant={"primary"}
           id="start"
           onClick={() => {
-            setStartRecordings("startRecordings");
-            handleStartRecording();
+            if (
+              isAuthentications &&
+              (userPlan?.plan == "free" || userPlan?.plan === "personal")
+            ) {
+              setUpgradeToProScreen("proScreen");
+            } else if (isAuthentications && userPlan?.plan == "pro") {
+              setStartRecordings("startRecordings");
+              handleStartRecording();
+            } else {
+              window.open("https://home.audionotes.app/", "_blank");
+            }
           }}
         >
           <RecordIcon />

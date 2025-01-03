@@ -41,8 +41,6 @@ export const handleAuthorization = async (): Promise<boolean> => {
       return false;
     }
 
-    console.log("Session set successfully:", data);
-
     // Fetch current user
     const { data: user, error: userError } = await supabase.auth.getUser();
 
@@ -50,7 +48,6 @@ export const handleAuthorization = async (): Promise<boolean> => {
       console.error("Failed to fetch user:", userError.message);
       return false;
     } else {
-      console.log("Current User:", user);
       return true;
     }
   } catch (err) {

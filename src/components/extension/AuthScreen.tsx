@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 
-const AuthScreen = () => {
+const AuthScreen = ({ isAuthentications }: any) => {
   return (
     <div className="p-4">
       <div className="flex flex-col justify-center items-center p-10 space-y-2">
@@ -19,13 +19,26 @@ const AuthScreen = () => {
           size={"lg"}
           className="flex items-center font-medium text-base leading-5 w-full bg-gradient-to-r from-[#FF4D00] to-[#FF2600] text-white"
           variant={"primary"}
+          onClick={() =>
+            !isAuthentications &&
+            window.open("https://home.audionotes.app/", "_blank")
+          }
         >
           Signup for Free
         </Button>
 
         <p className="font-medium text-sm text-center">
           Already Registered?
-          <span className="text-primary"> Login</span>
+          <span
+            onClick={() =>
+              !isAuthentications &&
+              window.open("https://home.audionotes.app/", "_blank")
+            }
+            className="text-primary cursor-pointer"
+          >
+            {" "}
+            Login
+          </span>
         </p>
       </div>
     </div>

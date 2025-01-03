@@ -21,8 +21,6 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
   const noteDate = new Date(note.created_at || new Date());
   const { date, time } = getDateTime(noteDate);
 
-  console.log("note", note);
-
   const initializeAudio = useCallback(async () => {
     if (!audioRef.current && note.audio_url) {
       try {
@@ -113,29 +111,31 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
                   <Button
                     variant="plain"
                     disabled={!note.audio_url}
-                    className={cn("rounded-full p-0 h-7 w-auto")}
+                    className={cn("rounded-full p-0 h-7 w-7")}
                     onClick={(e) => {
                       e.stopPropagation();
                       togglePlayPause(e);
                     }}
                   >
-                    <div className="flex items-center gap-1 px-1.5 pr-2 text-sm">
+                    <div className="flex items-center gap-1  text-sm">
                       {isLoading ? (
                         <Loader2 className="animate-spin size-4" />
                       ) : isPlaying ? (
                         <Pause className="size-3" />
                       ) : (
-                        <Play className="size-4 fill-heading" />
+                        <Play className="size-3 fill-heading" />
                       )}
                     </div>
                   </Button>
                 )}
             </div>
 
-            <div className="space-y-2">
-              <p className="text-gray-800 font-medium">{note.title}</p>
+            <div className="space-y-1">
+              <p className="text-gray-800 font-medium text-base">
+                {note.title}
+              </p>
 
-              <p className="flex items-center gap-2 text-date text-sm font-medium">
+              <p className="flex items-center space-x-2 text-date text-sm font-medium">
                 {date} · {time}
               </p>
 

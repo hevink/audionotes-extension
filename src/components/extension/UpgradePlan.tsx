@@ -79,20 +79,28 @@ const plansTitles = [
   },
 ];
 
-const UpgradePlan = ({ setUpgradePlan }: any) => {
+const UpgradePlan = ({
+  setUpgradePlan,
+  setUpgradeToProScreen,
+  setActiveTab,
+}: any) => {
   return (
     <div className="p-4">
       {/* Header Section */}
       <div className="relative flex items-center justify-center">
-        <div className="rounded-full absolute left-0">
-          <div
-            onClick={() => setUpgradePlan("")}
-            className="bg-plain rounded-full p-1 cursor-pointer"
-          >
+        <div
+          onClick={() => {
+            setUpgradeToProScreen("");
+            setUpgradePlan("");
+            setActiveTab("files");
+          }}
+          className="rounded-full absolute left-0"
+        >
+          <div className="bg-plain rounded-full p-1 cursor-pointer">
             <ArrowLeft className="h-5 w-5 text-subheading" />
           </div>
         </div>
-        <h2 className="text-base font-semibold">Send Mail</h2>
+        <h2 className="text-base font-semibold">Upgrade to Pro</h2>
       </div>
 
       <p className="text-active font-medium text-sm pt-4">
@@ -125,7 +133,7 @@ const UpgradePlan = ({ setUpgradePlan }: any) => {
                     {list.title}
                   </span>
                 </div>
-                <div className="col-span-2 text-center  flex items-center justify-center pb-2.5">
+                <div className="col-span-2 text-center text-sm font-semibold flex items-start justify-center pb-2.5">
                   {list.modeType}
                 </div>
                 <div
@@ -144,7 +152,7 @@ const UpgradePlan = ({ setUpgradePlan }: any) => {
 
       <Button
         size={"lg"}
-        className="flex items-center font-medium text-base mt-3 leading-5 w-full bg-gradient-to-r from-[#FF4D00] to-[#FF2600] text-white"
+        className="flex py-7 items-center rounded-full font-medium text-base mt-3 leading-5 w-full bg-gradient-to-r from-[#FF4D00] to-[#FF2600] text-white"
         variant={"primary"}
       >
         Upgrade to PRO

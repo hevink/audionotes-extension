@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import { FileText } from "lucide-react";
 import EmailShare from "./EmailShare";
@@ -10,15 +10,21 @@ import ShowLanguage from "./ShowLanguage";
 import RecordAudio from "./RecordAudio";
 import UpgradePlan from "./UpgradePlan";
 import { useAudioRecorder } from "react-audio-voice-recorder";
+import AuthScreen from "./AuthScreen";
+import UpgradeToPro from "./UpgradeToPro";
 
 // ----------------------------------------------------------------
 
-const HomePage = () => {
+const HomePage = ({ isAuthentications }: any) => {
+  const isLogin = sessionStorage.getItem("isFirstTimeLogin");
+  console.log(isLogin);
+
   const [activeTab, setActiveTab] = useState("audio");
   const [sendMail, setSendMail] = useState("");
   const [showLanguagesData, setShowLanguagesData] = useState("");
   const [startRecordings, setStartRecordings] = useState("");
   const [upgradePlan, setUpgradePlan] = useState("");
+  const [upgradeToProScreen, setUpgradeToProScreen] = useState("");
 
   //
   const [isRecordingAllow, setIsRecordingAllow] = useState(true);
@@ -54,6 +60,7 @@ const HomePage = () => {
     setRecordingStopped(false); // Reset stopped state
   }, [startRecording]);
 
+  //
   const handleStopRecording = useCallback(() => {
     if (recordingStarted && !recordingStopped) {
       // Stop the recording if it was started and not already stopped
@@ -84,6 +91,12 @@ const HomePage = () => {
     []
   );
 
+  // Function to handle upgrade plan visibility
+  const handleUpgradePlan = (value: string) => {
+    setStartRecordings(""); // Clear the recording state
+    setUpgradePlan(value); // Set the upgrade plan state
+  };
+
   return (
     <>
       <div className="bg-gray-100 flex items-center justify-center">
@@ -110,20 +123,38 @@ const HomePage = () => {
               setStartRecordings={setStartRecordings}
               isTextPending={isTextPending}
               isAudioPending={isAudioPending}
+              setUpgradePlan={handleUpgradePlan}
+              setUpgradeToProScreen={setUpgradeToProScreen}
+              setIsRecordingAllow={setIsRecordingAllow}
             />
           ) : upgradePlan === "upgradePlan" ? (
-            <UpgradePlan setUpgradePlan={setUpgradePlan} />
+            <UpgradePlan
+              setUpgradePlan={setUpgradePlan}
+              setUpgradeToProScreen={setUpgradeToProScreen}
+              setActiveTab={setActiveTab}
+            />
+          ) : upgradeToProScreen === "proScreen" ? (
+            <UpgradeToPro
+              setStartRecordings={setStartRecordings}
+              handleStartRecording={handleStartRecording}
+              setActiveTab={setActiveTab}
+              setUpgradeToProScreen={setUpgradeToProScreen}
+              setUpgradePlan={setUpgradePlan}
+            />
           ) : (
             <>
               {" "}
               {/* Header */}
-              <Header setUpgradePlan={setUpgradePlan} />
+              <Header
+                setUpgradePlan={setUpgradePlan}
+                isAuthentications={isAuthentications}
+              />
               {/* Tabs */}
-              <div className="flex mb-6">
+              <div className="flex mb-6 border">
                 <button
-                  className={`flex-1 font-medium transition-colors text-base p-4 ${
+                  className={`flex-1 font-semibold transition-colors text-base p-4 ${
                     activeTab === "audio"
-                      ? "border-b-2 border-orange-500 text-gray-900"
+                      ? "border-b-2 border-primary text-gray-900"
                       : "border-b-2 border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
                   }`}
                   onClick={() => handleTabSwitch("audio")}
@@ -131,9 +162,9 @@ const HomePage = () => {
                   Record Audio
                 </button>
                 <button
-                  className={`flex-1 flex items-center justify-center gap-2 text-base transition-colors p-4 ${
+                  className={`flex-1 font-semibold flex items-center justify-center gap-2 text-base transition-colors p-4 ${
                     activeTab === "files"
-                      ? "border-b-2 border-orange-500 text-gray-900"
+                      ? "border-b-2 border-primary text-gray-900"
                       : "border-b-2 border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
                   }`}
                   onClick={() => handleTabSwitch("files")}
@@ -149,14 +180,20 @@ const HomePage = () => {
                   setShowLanguagesData={setShowLanguagesData}
                   setStartRecordings={setStartRecordings}
                   handleStartRecording={handleStartRecording}
+                  isAuthentications={isAuthentications}
+                  setUpgradeToProScreen={setUpgradeToProScreen}
+                  isLogin={isLogin}
                 />
-              ) : (
+              ) : isAuthentications ? (
                 <RecentFile
                   setSendMail={setSendMail}
                   handleStartRecording={handleStartRecording}
                   setStartRecordings={setStartRecordings}
+                  isAuthentications={isAuthentications}
+                  setUpgradeToProScreen={setUpgradeToProScreen}
                 />
-                // <AuthScreen />
+              ) : (
+                <AuthScreen isAuthentications={isAuthentications} />
               )}
             </>
           )}

@@ -1,6 +1,6 @@
 import { useGetUserPlan } from "../../queries";
 
-const Header = ({ setUpgradePlan }: any) => {
+const Header = ({ setUpgradePlan, isAuthentications }: any) => {
   const { data: userPlan } = useGetUserPlan() as any;
 
   return (
@@ -13,7 +13,9 @@ const Header = ({ setUpgradePlan }: any) => {
           Audionotes<span className="text-primary">.app</span>
         </h1>
       </div>
-      {(userPlan?.plan == "free" || userPlan?.plan === "personal") && (
+      {(userPlan?.plan == "free" ||
+        userPlan?.plan === "personal" ||
+        !isAuthentications) && (
         <button
           onClick={() => setUpgradePlan("upgradePlan")}
           className="bg-[#FFE9DF] text-primary px-3 py-1 rounded-full font-semibold text-sm"
@@ -21,14 +23,17 @@ const Header = ({ setUpgradePlan }: any) => {
           Upgrade Plan
         </button>
       )}
-      {(userPlan?.plan == "pro" || userPlan?.plan === "ultra") && (
-        <button
-          onClick={() => window.open("https://home.audionotes.app/", "_blank")}
-          className="bg-[#F8F8F8] text-foreground px-3 py-1 rounded-full font-semibold text-sm"
-        >
-          My Account
-        </button>
-      )}
+      {isAuthentications &&
+        (userPlan?.plan == "pro" || userPlan?.plan === "ultra") && (
+          <button
+            onClick={() =>
+              window.open("https://home.audionotes.app/", "_blank")
+            }
+            className="bg-[#F8F8F8] text-foreground px-3 py-1 rounded-full font-semibold text-sm"
+          >
+            My Account
+          </button>
+        )}
     </div>
   );
 };
