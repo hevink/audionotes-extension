@@ -6,34 +6,21 @@ import { useGetLanguages } from "../../queries";
 const ShowLanguage = ({ setShowLanguagesData }: any) => {
   const { data: languages = [], isLoading } = useGetLanguages();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    languages[0]?.name
+  );
 
-  if (isLoading) return <div>Loading...</div>;
-
-  const handleKeyDown = (e: any) => {
-    switch (e.key) {
-      case "ArrowUp":
-        e.preventDefault();
-        setSelectedIndex((prev) =>
-          prev > 0 ? prev - 1 : languages.length - 1
-        );
-        break;
-      case "ArrowDown":
-        e.preventDefault();
-        setSelectedIndex((prev) =>
-          prev < languages.length - 1 ? prev + 1 : 0
-        );
-        break;
-      case "Enter":
-        setSelectedLanguage(languages[selectedIndex]);
-        break;
-    }
-  };
 
   useEffect(() => {
-    // Update selected language when index changes
-    setSelectedLanguage(languages[selectedIndex]);
-  }, [selectedIndex]);
+    if (languages.length > 0) {
+      setSelectedLanguage(languages[selectedIndex]);
+    }
+  }, [selectedIndex, languages]);
+
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="p-4">
@@ -49,20 +36,19 @@ const ShowLanguage = ({ setShowLanguagesData }: any) => {
         <h2 className="text-base font-semibold">Input Language</h2>
       </div>
 
-      <div className="p-2" tabIndex={0} onKeyDown={handleKeyDown}>
+      <div className="p-2" tabIndex={0}>
         {languages.map((language, index) => (
           <div
             key={language.id}
-            className={`p-4 cursor-pointer flex items-center justify-between rounded-full ${
-              selectedIndex === index ? "bg-[#F8F8F8] " : "hover:bg-gray-50"
-            }`}
+            className={`p-4 cursor-pointer flex items-center justify-between rounded-full ${selectedIndex === index ? "bg-[#F8F8F8]" : "hover:bg-gray-50"
+              }`}
             onClick={() => {
               setSelectedIndex(index);
               setSelectedLanguage(language);
             }}
           >
             <span className="text-base">{language.name}</span>
-            {selectedLanguage.id === language.id && (
+            {selectedLanguage?.id === language.id && (
               <svg
                 className="w-5 h-5 text-red-500"
                 fill="none"
@@ -87,7 +73,7 @@ const ShowLanguage = ({ setShowLanguagesData }: any) => {
           variant={"secondary"}
           className="w-full rounded-full py-6"
         >
-          Send
+          Save
         </Button>
       </div>
     </div>
