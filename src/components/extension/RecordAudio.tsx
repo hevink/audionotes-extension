@@ -1,6 +1,6 @@
 //
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, Download, LoaderCircle, Play, X } from "lucide-react";
+import { Download, LoaderCircle, Play, X } from "lucide-react";
 import * as tus from "tus-js-client";
 import { LiveAudioVisualizer } from "react-audio-visualize";
 // Components ...
