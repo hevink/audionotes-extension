@@ -100,7 +100,12 @@ const RecentAudio = ({
 
       <div className="space-y-2 mt-16">
         <div className="flex items-center justify-center">
-          <div className="border border-[#E5E5E5] flex items-center justify-center rounded-full py-[2px] px-1.5 gap-2 cursor-pointer">
+          <div
+            onClick={() =>
+              window.open("https://home.audionotes.app/", "_blank")
+            }
+            className="border border-[#E5E5E5] flex items-center justify-center rounded-full py-[2px] px-1.5 gap-2 cursor-pointer"
+          >
             <p className="text-xs font-semibold text-active leading-5">
               Get more minutes
             </p>

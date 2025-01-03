@@ -325,7 +325,10 @@ const RecordAudio = ({
         </p>
       </div>
 
-      <div className="flex items-center justify-center mb-8">
+      <div
+        onClick={() => window.open("https://home.audionotes.app/", "_blank")}
+        className="flex items-center justify-center mb-8"
+      >
         <Badge
           variant="primary"
           className="rounded-full font-semibold text-sm leading-4 py-1.5 px-2.5 gap-1"
