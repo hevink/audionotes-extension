@@ -49,6 +49,7 @@ export const getLanguages = async () => {
   try {
     const { data, error } = await supabase.from("languages").select();
     if (error) {
+      console.error("Error getting languages:", error);
       throw error.message;
     }
     return { data: data };
