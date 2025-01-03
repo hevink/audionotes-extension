@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import { FileText } from "lucide-react";
 import EmailShare from "./EmailShare";
@@ -12,13 +12,14 @@ import UpgradePlan from "./UpgradePlan";
 import { useAudioRecorder } from "react-audio-voice-recorder";
 import AuthScreen from "./AuthScreen";
 import UpgradeToPro from "./UpgradeToPro";
+import { useGetLanguages } from "../../queries";
 
 // ----------------------------------------------------------------
 
 const HomePage = ({ isAuthentications }: any) => {
   const storedLoginState = sessionStorage.getItem("isFirstTimeLogin");
 
-  //
+  // Manage extension screens ...
   const [activeTab, setActiveTab] = useState("audio");
   const [sendMail, setSendMail] = useState("");
   const [showLanguagesData, setShowLanguagesData] = useState("");
@@ -33,6 +34,11 @@ const HomePage = ({ isAuthentications }: any) => {
   const [isAudioPending, setIsAudioPending] = useState(false);
   const [isTextPending, setIsTextPending] = useState(false);
 
+  // Show language states ...
+  const { data: languages = [], isLoading } = useGetLanguages();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]?.name);
+
   const {
     startRecording,
     stopRecording,
@@ -42,10 +48,12 @@ const HomePage = ({ isAuthentications }: any) => {
     togglePauseResume,
   } = useAudioRecorder();
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    console.log(e);
-  };
+  // For caching first language from API ...
+  useEffect(() => {
+    if (languages.length > 0) {
+      setSelectedLanguage(languages[selectedIndex]);
+    }
+  }, [selectedIndex, languages]);
 
   const handleTabSwitch = (tab: any) => {
     setActiveTab(tab);
@@ -100,7 +108,15 @@ const HomePage = ({ isAuthentications }: any) => {
           {sendMail === "showDetails" ? (
             <EmailShare setSendMail={setSendMail} />
           ) : showLanguagesData === "setShowLanguagesData" ? (
-            <ShowLanguage setShowLanguagesData={setShowLanguagesData} />
+            <ShowLanguage
+              setShowLanguagesData={setShowLanguagesData}
+              languages={languages}
+              isLoading={isLoading}
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
+              selectedLanguage={selectedLanguage}
+              setSelectedLanguage={setSelectedLanguage}
+            />
           ) : startRecordings === "startRecordings" ? (
             <RecordAudio
               stopRecording={stopRecording}
@@ -170,13 +186,13 @@ const HomePage = ({ isAuthentications }: any) => {
               {/* Content */}
               {activeTab === "audio" ? (
                 <RecentAudio
-                  handleSubmit={handleSubmit}
                   setShowLanguagesData={setShowLanguagesData}
                   setStartRecordings={setStartRecordings}
                   handleStartRecording={handleStartRecording}
                   isAuthentications={isAuthentications}
                   setUpgradeToProScreen={setUpgradeToProScreen}
                   storedLoginState={storedLoginState}
+                  selectedLanguage={selectedLanguage}
                 />
               ) : isAuthentications ? (
                 <RecentFile

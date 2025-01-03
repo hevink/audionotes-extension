@@ -9,13 +9,13 @@ import { useGetUserPlan } from "../../queries";
 import { PrimaryArrowIcon } from "../../assets/icons/LeftArrowIcon";
 
 const RecentAudio = ({
-  handleSubmit,
   setShowLanguagesData,
   setStartRecordings,
   handleStartRecording,
   isAuthentications,
   setUpgradeToProScreen,
   storedLoginState,
+  selectedLanguage,
 }: any) => {
   const { data: userPlan } = useGetUserPlan() as any;
 
@@ -46,7 +46,7 @@ const RecentAudio = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="text-center px-4">
+    <div className="text-center px-4">
       <p className="text-sm text-active font-medium mb-2 leading-5">
         To record zoom/google meet call click on include system audio
       </p>
@@ -58,7 +58,7 @@ const RecentAudio = ({
           <div className="flex items-center gap-1.5">
             <InputLanguageIcon />
             <span className="text-heading font-medium leading-5 text-base">
-              Input Language - Autodetect
+              Input Language - {selectedLanguage?.name}
             </span>
           </div>
 
@@ -137,7 +137,7 @@ const RecentAudio = ({
           Start recording
         </Button>
       </div>
-    </form>
+    </div>
   );
 };
 

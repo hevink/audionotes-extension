@@ -1,20 +1,16 @@
-import { useState, useEffect } from "react";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
-import { useGetLanguages } from "../../queries";
 import { LeftArrowIcon } from "../../assets/icons/LeftArrowIcon";
 
-const ShowLanguage = ({ setShowLanguagesData }: any) => {
-  const { data: languages = [], isLoading } = useGetLanguages();
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]?.name);
-
-  useEffect(() => {
-    if (languages.length > 0) {
-      setSelectedLanguage(languages[selectedIndex]);
-    }
-  }, [selectedIndex, languages]);
-
+const ShowLanguage = ({
+  setShowLanguagesData,
+  languages,
+  isLoading,
+  selectedIndex,
+  setSelectedIndex,
+  selectedLanguage,
+  setSelectedLanguage,
+}: any) => {
   return (
     <div className="p-4">
       <div className="relative flex items-center justify-center mb-8">
@@ -36,7 +32,7 @@ const ShowLanguage = ({ setShowLanguagesData }: any) => {
       ) : (
         <>
           <div className="" tabIndex={0}>
-            {languages.map((language, index) => (
+            {languages.map((language: any, index: number) => (
               <div
                 key={language.id}
                 className={`p-2.5 cursor-pointer flex items-center justify-between rounded-full ${
