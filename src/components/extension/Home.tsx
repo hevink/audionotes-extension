@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { Card } from "../ui/card";
 import { FileText } from "lucide-react";
 import EmailShare from "./EmailShare";
 import Header from "../commonComponent/Header";
@@ -12,12 +11,13 @@ import UpgradePlan from "./UpgradePlan";
 import { useAudioRecorder } from "react-audio-voice-recorder";
 import AuthScreen from "./AuthScreen";
 import UpgradeToPro from "./UpgradeToPro";
-import { useGetLanguages } from "../../queries";
+import { useGetLanguages, useGetUser } from "../../queries";
 
 // ----------------------------------------------------------------
 
 const HomePage = ({ isAuthentications }: any) => {
   const storedLoginState = sessionStorage.getItem("isFirstTimeLogin");
+  const { isLoading: isUserLoading } = useGetUser();
 
   // Manage extension screens ...
   const [activeTab, setActiveTab] = useState("audio");
@@ -35,7 +35,8 @@ const HomePage = ({ isAuthentications }: any) => {
   const [isTextPending, setIsTextPending] = useState(false);
 
   // Show language states ...
-  const { data: languages = [], isLoading } = useGetLanguages();
+  const { data: languages = [], isLoading: isGetLanguageLoading } =
+    useGetLanguages();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]?.name);
 
@@ -112,7 +113,7 @@ const HomePage = ({ isAuthentications }: any) => {
             <ShowLanguage
               setShowLanguagesData={setShowLanguagesData}
               languages={languages}
-              isLoading={isLoading}
+              isLoading={isGetLanguageLoading}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedLanguage={selectedLanguage}
@@ -196,7 +197,7 @@ const HomePage = ({ isAuthentications }: any) => {
                   storedLoginState={storedLoginState}
                   selectedLanguage={selectedLanguage}
                 />
-              ) : isAuthentications ? (
+              ) : isAuthentications || !isUserLoading ? (
                 <RecentFile
                   setSendMail={setSendMail}
                   handleStartRecording={handleStartRecording}
@@ -204,9 +205,9 @@ const HomePage = ({ isAuthentications }: any) => {
                   isAuthentications={isAuthentications}
                   setUpgradeToProScreen={setUpgradeToProScreen}
                 />
-              ) : (
+              ) : !isAuthentications && !isUserLoading ? (
                 <AuthScreen isAuthentications={isAuthentications} />
-              )}
+              ) : null}
             </>
           )}
         </div>

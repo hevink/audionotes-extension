@@ -31,7 +31,7 @@ export const handleAuthorization = async (): Promise<boolean> => {
     const base64Token = (token0?.split("base64-")[1] || "") + token1;
     const session = JSON.parse(atob(base64Token));
 
-    const { data, error } = await supabase.auth.setSession({
+    const { error } = await supabase.auth.setSession({
       access_token: session.access_token,
       refresh_token: session.refresh_token,
     });
@@ -42,7 +42,7 @@ export const handleAuthorization = async (): Promise<boolean> => {
     }
 
     // Fetch current user
-    const { data: user, error: userError } = await supabase.auth.getUser();
+    const { error: userError } = await supabase.auth.getUser();
 
     if (userError) {
       console.error("Failed to fetch user:", userError.message);
