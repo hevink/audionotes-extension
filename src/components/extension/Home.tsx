@@ -4,7 +4,6 @@ import EmailShare from "./EmailShare";
 import Header from "../commonComponent/Header";
 import RecentAudio from "./RecentAudio";
 import RecentFile from "./RecentFile";
-// import AuthScreen from "./AuthScreen";
 import ShowLanguage from "./ShowLanguage";
 import RecordAudio from "./RecordAudio";
 import UpgradePlan from "./UpgradePlan";
@@ -33,6 +32,7 @@ const HomePage = ({ isAuthentications }: any) => {
   const [recordingStarted, setRecordingStarted] = useState(false); // State to track if recording has started
   const [isAudioPending, setIsAudioPending] = useState(false);
   const [isTextPending, setIsTextPending] = useState(false);
+  const [isCancelled, setIsCancelled] = useState(false);
 
   // Show language states ...
   const { data: languages = [], isLoading: isGetLanguageLoading } =
@@ -62,6 +62,7 @@ const HomePage = ({ isAuthentications }: any) => {
   };
 
   const handleStartRecording = useCallback(() => {
+    setIsCancelled(false);
     startRecording();
     setRecordingStarted(true);
     setRecordingStopped(false); // Reset stopped state
@@ -77,6 +78,7 @@ const HomePage = ({ isAuthentications }: any) => {
     } else {
       // Restart recording if it was canceled or stopped
       handleStartRecording();
+      setRecordingStopped(false); // Reset stopped state
     }
   }, [
     stopRecording,
@@ -139,6 +141,8 @@ const HomePage = ({ isAuthentications }: any) => {
               setUpgradePlan={handleUpgradePlan}
               setUpgradeToProScreen={setUpgradeToProScreen}
               isPaused={isPaused}
+              setIsCancelled={setIsCancelled}
+              isCancelled={isCancelled}
             />
           ) : upgradePlan === "upgradePlan" ? (
             <UpgradePlan

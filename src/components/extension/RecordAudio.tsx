@@ -37,6 +37,8 @@ interface RecorderProps {
   setUpgradePlan: (upgradePlan: string) => void;
   setUpgradeToProScreen: (upgradePlan: string) => void;
   isPaused: boolean;
+  setIsCancelled: (value: boolean) => void;
+  isCancelled: boolean;
 }
 
 const RecordAudio = ({
@@ -58,6 +60,8 @@ const RecordAudio = ({
   setUpgradePlan,
   setUpgradeToProScreen,
   isPaused,
+  setIsCancelled,
+  isCancelled,
 }: RecorderProps) => {
   const [recordingBlobState, setRecordingBlobState] = useState<Blob | null>(
     null
@@ -72,6 +76,7 @@ const RecordAudio = ({
   const [youtubeUrl, setYoutubeUrl] = useState<string>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [accessToken, setAccessToken] = useState<string | undefined>("");
+
   const { data: plan } = useGetUserPlan() as any;
 
   const user = async () => {
@@ -207,10 +212,11 @@ const RecordAudio = ({
   }, [recordingBlobState]);
 
   const handleCancelRecording = useCallback(() => {
+    setIsCancelled(true);
     stopRecording();
-    setRecordingStarted(false); // Mark recording as not started
-    setRecordingStopped(false); // Reset stopped state
-    setRecordingBlobState(null); // Clear blob state
+    setRecordingStopped(true);
+    setRecordingBlobState(null);
+    // setShouldProcessRecording(false);
   }, [stopRecording]);
 
   const sendNoteToAPI = useCallback(async () => {
@@ -285,13 +291,13 @@ const RecordAudio = ({
   }, [audioUrl, inputText, youtubeUrl, sendNoteToAPI]);
 
   useEffect(() => {
-    if (recordingBlob) {
+    if (recordingBlob && !isCancelled) {
       setRecordingBlobState(recordingBlob);
     }
   }, [recordingBlob]);
 
   useEffect(() => {
-    if (recordingBlobState) {
+    if (recordingBlobState && !isCancelled) {
       handlePending("audio", true);
       stableHandleRecording(recordingBlobState);
     }
