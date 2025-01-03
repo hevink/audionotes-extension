@@ -104,7 +104,9 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
   };
 
   return (
-    <div className="space-y-2">
+    <div
+      className={cn("space-y-2", !isLast && "border-b border-[#F1F5FA] pb-2")}
+    >
       {note.is_ready === "yes" ? (
         <div>
           <div className="flex gap-3">
@@ -209,7 +211,6 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
           </p>
         </div>
       )}
-      {!isLast && <div className="border-[1px] border-[#F1F5FA] mt-2" />}
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import { useGetUserPlan } from "../../queries";
+import { Skeleton } from "../ui/skeleton";
 
 const Header = ({ setUpgradePlan, isAuthentications }: any) => {
-  const { data: userPlan, isLoading } = useGetUserPlan() as any;
+  const { data: userPlan } = useGetUserPlan() as any;  
 
   return (
     <div className="flex justify-between items-center px-5 py-4">
@@ -12,8 +13,8 @@ const Header = ({ setUpgradePlan, isAuthentications }: any) => {
         </h1>
       </div>
 
-      {isLoading && isAuthentications ? (
-        <div />
+      {isAuthentications === null  ? (
+        <Skeleton className="w-24 h-7 rounded-full" />
       ) : (
         <>
           {isAuthentications && ["pro", "ultra"].includes(userPlan?.plan) ? (
