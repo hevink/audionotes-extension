@@ -20,7 +20,7 @@ const Header = ({ setUpgradePlan, isAuthentications }: any) => {
           {isAuthentications && ["pro", "ultra"].includes(userPlan?.plan) ? (
             <button
               onClick={() =>
-                window.open("https://home.audionotes.app/", "_blank")
+                window.open("https://home.audionotes.app/account", "_blank")
               }
               className="bg-[#F8F8F8] text-foreground px-3 py-1 rounded-full font-semibold text-sm"
             >
