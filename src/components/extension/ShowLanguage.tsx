@@ -27,7 +27,7 @@ const ShowLanguage = ({
 
       {isLoading ? (
         <div className="h-[450px] flex items-center justify-center">
-          <Loader2 size={32} className="animate-spin" />
+          <Loader2 size={32} className="animate-spin text-primary" />
         </div>
       ) : (
         <>

@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import RecordIcon from "../../assets/icons/RecordIcon";
 import RecentFileItem from "./RecentFileItem";
 import { useGetInitialNotes, useGetUserPlan } from "../../queries";
+import { Loader2 } from "lucide-react";
 
 type RecentFileProps = {
   setSendMail: (value: string) => void;
@@ -19,15 +20,25 @@ const RecentFile: React.FC<RecentFileProps> = ({
   isAuthentications,
   setUpgradeToProScreen,
 }) => {
-  const { data: notes = [], isPending: isInitialLoading } =
-    useGetInitialNotes();
+  const { data: notes = [], isPending: isNotesLoading } = useGetInitialNotes();
   const { data: userPlan } = useGetUserPlan() as any;
 
   return (
-    <div className="space-y-4 px-4 pb-4">
-      {notes.map((note, index) => (
-        <RecentFileItem key={note.id} note={note} setSendMail={setSendMail} />
-      ))}
+    <div className="space-y-4 px-5 py-4">
+      {isNotesLoading ? (
+        <div className="h-[272px] flex items-center justify-center">
+          <Loader2 className="h-8 animate-spin text-primary" />
+        </div>
+      ) : (
+        notes.map((note, index) => (
+          <RecentFileItem
+            key={note.id}
+            note={note}
+            setSendMail={setSendMail}
+            isLast={index === notes.length - 1}
+          />
+        ))
+      )}
 
       <div className="space-y-2">
         <Button

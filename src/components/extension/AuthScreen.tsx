@@ -2,8 +2,8 @@ import { Button } from "../ui/button";
 
 const AuthScreen = ({ isAuthentications }: any) => {
   return (
-    <div className="p-4">
-      <div className="flex flex-col justify-center items-center p-10 space-y-2">
+    <div className="">
+      <div className="flex flex-col justify-center items-center space-y-2 max-w-[253px] mx-auto py-32">
         <p className="text-foreground font-bold text-lg text-center">
           You are are not Logged In
         </p>
@@ -14,10 +14,10 @@ const AuthScreen = ({ isAuthentications }: any) => {
         </p>
       </div>
 
-      <div className="space-y-3 px-6 pt-12">
+      <div className="space-y-3 px-8">
         <Button
           size={"lg"}
-          className="flex items-center font-medium text-base leading-5 w-full bg-gradient-to-r from-[#FF4D00] to-[#FF2600] text-white"
+          className="flex items-center font-medium text-base leading-5 w-full bg-gradient-to-br from-[#FF4D00] to-[#FF2600] text-white"
           variant={"primary"}
           onClick={() =>
             !isAuthentications &&

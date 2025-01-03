@@ -14,7 +14,7 @@ const App = () => {
   }, [isAuthenticated]);
 
   return (
-    <div className="w-96">
+    <div className="w-96 h-[546px]">
       <HomePage isAuthentications={isAuthenticated} />
     </div>
   );

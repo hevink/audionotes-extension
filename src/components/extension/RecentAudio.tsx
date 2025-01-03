@@ -46,14 +46,14 @@ const RecentAudio = ({
   };
 
   return (
-    <div className="text-center px-4">
+    <div className="text-center px-4 mt-[38px]">
       <p className="text-sm text-active font-medium mb-2 leading-5">
         To record zoom/google meet call click on include system audio
       </p>
       <div className="space-y-2">
         <div
           onClick={() => setShowLanguagesData("setShowLanguagesData")}
-          className="flex justify-between gap-2 items-center px-4 py-[14px] rounded-full border border-gray-200 bg-inactive cursor-pointer"
+          className="flex justify-between gap-2 items-center px-4 py-[14px] rounded-[22px] border border-[#F6F6F6] bg-inactive cursor-pointer"
         >
           <div className="flex items-center gap-1.5">
             <InputLanguageIcon />
@@ -68,7 +68,7 @@ const RecentAudio = ({
         </div>
         <div
           onClick={toggleDropdown}
-          className="flex justify-between gap-2 items-center px-4 py-[14px] rounded-full bg-gray-50 border border-gray-200 bg-inactive cursor-pointer"
+          className="flex justify-between gap-2 items-center px-4 py-[14px] rounded-[22px] bg-gray-50 border border-[#F6F6F6] bg-inactive cursor-pointer"
         >
           <div className="flex items-center gap-1.5 cursor-pointer">
             <HeadphoneIcon />
@@ -90,7 +90,7 @@ const RecentAudio = ({
             cleanDeviceLabel={cleanDeviceLabel}
           />
         </div>
-        <div className="flex items-center gap-1.5 px-4 py-[14px] rounded-full bg-gray-50 border border-gray-200 bg-inactive">
+        <div className="flex items-center gap-1.5 px-4 py-[14px] rounded-[22px] bg-gray-50 border border-[#F6F6F6] bg-inactive">
           <div className="border-2 border-[#A5A5A5] rounded-full h-4 w-4" />
           <span className="text-gray-600 font-medium text-heading text-base">
             Include System Audio
@@ -99,9 +99,9 @@ const RecentAudio = ({
       </div>
 
       <div className="space-y-2 mt-16">
-        <div className="flex items-center justify-center gap-2">
-          <div className="border border-[#E5E5E5] flex rounded-full py-1 px-2 gap-2 shadow-sm cursor-pointer">
-            <p className="text-xs font-semibold text-active">
+        <div className="flex items-center justify-center">
+          <div className="border border-[#E5E5E5] flex items-center justify-center rounded-full py-[2px] px-1.5 gap-2 cursor-pointer">
+            <p className="text-xs font-semibold text-active leading-5">
               Get more minutes
             </p>
             <div className="flex items-center">
@@ -111,7 +111,7 @@ const RecentAudio = ({
         </div>
         <Button
           size={"lg"}
-          className="flex items-center font-medium text-base leading-5 w-full"
+          className="flex items-center font-medium text-base leading-5 w-full gap-1"
           variant={"primary"}
           id="start"
           onClick={() => {
@@ -130,6 +130,8 @@ const RecentAudio = ({
               } else {
                 window.open("https://home.audionotes.app/", "_blank");
               }
+            } else {
+              window.open("https://home.audionotes.app/", "_blank");
             }
           }}
         >

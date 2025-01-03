@@ -8,11 +8,13 @@ import { Button } from "../ui/button";
 type RecentFileItemProps = {
   note: PartialTypeNote;
   setSendMail: (value: string) => void;
+  isLast?: boolean;
 };
 
 const RecentFileItem: React.FC<RecentFileItemProps> = ({
   note,
   setSendMail,
+  isLast
 }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -119,7 +121,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
                   >
                     <div className="flex items-center gap-1  text-sm">
                       {isLoading ? (
-                        <Loader2 className="animate-spin size-4" />
+                        <Loader2 className="animate-spin size-4 text-primary" />
                       ) : isPlaying ? (
                         <Pause className="size-3" />
                       ) : (
@@ -131,7 +133,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
             </div>
 
             <div className="space-y-1">
-              <p className="text-gray-800 font-medium text-base">
+              <p className="text-heading leading-6 font-medium text-base">
                 {note.title}
               </p>
 
@@ -139,9 +141,9 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
                 {date} · {time}
               </p>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5">
                 <div
-                  className="px-3 py-2 rounded-full text-heading text-xs font-semibold bg-[#F3F3F3] cursor-pointer"
+                  className="px-2 py-1 rounded-full text-heading text-xs leading-5 font-semibold bg-[#F3F3F3] cursor-pointer"
                   onClick={() => {
                     window.open(
                       `https://home.audionotes.app/${note.id}`,
@@ -152,7 +154,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
                   Transcript
                 </div>
                 <div
-                  className="px-3 py-2 rounded-full text-heading text-xs font-semibold bg-[#F3F3F3] cursor-pointer"
+                  className="px-2 py-1 leading-5 rounded-full text-heading text-xs font-semibold bg-[#F3F3F3] cursor-pointer"
                   onClick={() => {
                     window.open(
                       `https://home.audionotes.app/${note.id}`,
@@ -163,7 +165,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
                   Summary
                 </div>
                 <div
-                  className="flex items-center space-x-1 px-3 py-2 rounded-full text-xs text-heading font-semibold whitespace-nowrap bg-[#F3F3F3] cursor-pointer"
+                  className="flex items-center space-x-1 px-2 py-1 leading-5 rounded-full text-xs text-heading font-semibold whitespace-nowrap bg-[#F3F3F3] cursor-pointer"
                   onClick={() => setSendMail("showDetails")}
                 >
                   <Send size={15} />
@@ -172,7 +174,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
               </div>
             </div>
           </div>
-          <div className="border-[1px] border-[#F1F5FA] mt-2" />
+          {!isLast && <div className="border-[1px] border-[#F1F5FA] mt-2" />}
         </div>
       ) : (
         <div className="space-y-2">

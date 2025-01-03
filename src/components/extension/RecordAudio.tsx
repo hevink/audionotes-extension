@@ -16,6 +16,7 @@ import { createNote, useGetUserPlan } from "../../queries";
 // Helper functions ...
 import { randomBytes } from "../../helper/makeUrl";
 import { formatTime } from "../../lib/utils";
+import { LeftArrowIcon } from "../../assets/icons/LeftArrowIcon";
 
 interface RecorderProps {
   stopRecording: () => void;
@@ -312,12 +313,12 @@ const RecordAudio = ({
               setStartRecordings("");
               setActiveTab("files");
             }}
-            className="bg-plain rounded-full p-1 cursor-pointer"
+            className="bg-plain rounded-full p-0.5 cursor-pointer"
           >
-            <ArrowLeft className="h-5 w-5 text-subheading" />
+            <LeftArrowIcon />
           </div>
         </div>
-        <p className="text-foreground font-semibold text-center leading-5 flex items-center">
+        <p className="text-foreground font-semibold text-base text-center leading-5 flex items-center">
           Recording Audio
         </p>
       </div>
@@ -331,22 +332,24 @@ const RecordAudio = ({
           <RightArrowIcon />
         </Badge>
       </div>
-      {mediaRecorder && (
-        <div className="flex justify-center items-center w-full">
-          <LiveAudioVisualizer
-            mediaRecorder={mediaRecorder}
-            width={280}
-            height={50}
-            barWidth={3}
-            gap={4}
-            fftSize={512}
-            maxDecibels={-10}
-            minDecibels={-80}
-            smoothingTimeConstant={0.8}
-            barColor="#C8C8C8"
-          />
-        </div>
-      )}
+      <div className="h-[242px] flex items-center justify-center">
+        {mediaRecorder && (
+          <div className="flex justify-center items-center w-full">
+            <LiveAudioVisualizer
+              mediaRecorder={mediaRecorder}
+              width={280}
+              height={50}
+              barWidth={3}
+              gap={4}
+              fftSize={512}
+              maxDecibels={-10}
+              minDecibels={-80}
+              smoothingTimeConstant={0.8}
+              barColor="#C8C8C8"
+            />
+          </div>
+        )}
+      </div>
       <div className="font-semibold text-2xl leading-5 text-center mt-5">
         {formatTime(recordingTime, (plan?.recording_time ?? 60) >= 3600)} /{" "}
         {formatTime(

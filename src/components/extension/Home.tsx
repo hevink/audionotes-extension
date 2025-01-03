@@ -103,8 +103,8 @@ const HomePage = ({ isAuthentications }: any) => {
 
   return (
     <>
-      <div className="bg-gray-100 flex items-center justify-center">
-        <Card className="w-96 bg-white rounded-[20px] border-none">
+      <div className="flex items-center justify-center">
+        <div className="w-96">
           {sendMail === "showDetails" ? (
             <EmailShare setSendMail={setSendMail} />
           ) : showLanguagesData === "setShowLanguagesData" ? (
@@ -160,12 +160,12 @@ const HomePage = ({ isAuthentications }: any) => {
                 isAuthentications={isAuthentications}
               />
               {/* Tabs */}
-              <div className="flex mb-[38px] border">
+              <div className="flex border">
                 <button
                   className={`flex-1 font-semibold leading-5 text-base p-4 ${
                     activeTab === "audio"
                       ? "border-b-2 border-primary text-gray-900"
-                      : "border-b-2 border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
+                      : "border-b border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
                   }`}
                   onClick={() => handleTabSwitch("audio")}
                 >
@@ -175,7 +175,7 @@ const HomePage = ({ isAuthentications }: any) => {
                   className={`flex-1 font-semibold leading-5 flex items-center justify-center gap-1 text-base p-4 ${
                     activeTab === "files"
                       ? "border-b-2 border-primary text-gray-900"
-                      : "border-b-2 border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
+                      : "border-b border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
                   }`}
                   onClick={() => handleTabSwitch("files")}
                 >
@@ -207,7 +207,7 @@ const HomePage = ({ isAuthentications }: any) => {
               )}
             </>
           )}
-        </Card>
+        </div>
       </div>
     </>
   );
