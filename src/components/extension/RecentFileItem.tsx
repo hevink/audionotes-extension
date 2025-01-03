@@ -4,6 +4,7 @@ import { AlertCircle, Loader2, Pause, Play, Send } from "lucide-react";
 import { cn, getDateTime } from "../../lib/utils";
 import { PartialTypeNote } from "../../lib/types";
 import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 type RecentFileItemProps = {
   note: PartialTypeNote;
@@ -14,7 +15,7 @@ type RecentFileItemProps = {
 const RecentFileItem: React.FC<RecentFileItemProps> = ({
   note,
   setSendMail,
-  isLast
+  isLast,
 }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -176,13 +177,33 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
           </div>
           {!isLast && <div className="border-[1px] border-[#F1F5FA] mt-2" />}
         </div>
+      ) : note.is_ready !== "no" ? (
+        <div className="flex  gap-2">
+          <Skeleton className="size-6" />
+          <div className="flex flex-col gap-2 w-full">
+            <div className="flex items-center gap-2">
+              <Loader2 className="size-5 text-subheading animate-spin" />
+              <p className="text-sm text-medium ">
+                AI is generating your notes
+              </p>
+            </div>
+            <Skeleton className="h-4 w-full" />
+            <div className="flex gap-2">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-full" />
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-red-500">
             <div className="bg-plain rounded-full p-1">
               <AlertCircle className="w-5 h-5 text-white" fill="#FF3300" />
             </div>
-            <span className="font-medium">{note.title}</span>
+            <span className="font-medium">
+              {note.title ?? "Processing Failed"}
+            </span>
           </div>
           <p className="text-date ml-9">
             We're facing a delay. Your audio will be processed soon.
