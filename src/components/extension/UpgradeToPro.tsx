@@ -46,7 +46,7 @@ const UpgradeToPro = ({
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center mt-28">
+      <div className="flex flex-col items-center justify-center my-36">
         <div className="max-w-64 ">
           <p className="text-foreground font-bold text-lg leading-6 text-center">
             Unlock <span className="text-primary"> PRO </span> Benefits
@@ -67,7 +67,7 @@ const UpgradeToPro = ({
       <Button
         variant="plain"
         size="lg"
-        className="font-medium text-base w-full mt-36 bg-[#F3F3F3] gap-1.5"
+        className="font-medium text-base w-full bg-[#F3F3F3] gap-1.5"
         onClick={() => {
           setStartRecordings("startRecordings");
           handleStartRecording();

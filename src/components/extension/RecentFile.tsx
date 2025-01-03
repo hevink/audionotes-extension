@@ -29,7 +29,7 @@ const RecentFile: React.FC<RecentFileProps> = ({
         <div className="h-[272px] flex items-center justify-center">
           <Loader2 className="h-8 animate-spin text-primary" />
         </div>
-      ) : (
+      ) : notes.length > 0 ? (
         notes.map((note, index) => (
           <RecentFileItem
             key={note.id}
@@ -38,6 +38,14 @@ const RecentFile: React.FC<RecentFileProps> = ({
             isLast={index === notes.length - 1}
           />
         ))
+      ) : (
+        <div className="h-[272px] flex flex-col items-center justify-center">
+          <p className="text-xl font-semibold">Welcome to Audionotes!</p>
+          <p className="text-lg text-center font-medium text-subheading mt-3 max-w-80">
+            Hit the <span className="text-primary"> Start recording </span>button to record your first
+            audio note
+          </p>
+        </div>
       )}
 
       <div className="space-y-2">

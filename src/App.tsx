@@ -13,6 +13,13 @@ const App = () => {
     }
   }, [isAuthenticated]);
 
+  navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+    console.log("stream", stream);
+  }).catch((err) => {
+    console.log("error", err);
+    alert("Please grant microphone access in your browser settings.");
+  });
+
   return (
     <div className="w-96 h-[546px]">
       <HomePage isAuthentications={isAuthenticated} />

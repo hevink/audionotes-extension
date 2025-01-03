@@ -129,7 +129,10 @@ const RecentAudio = ({
               ) {
                 setStartRecordings("startRecordings");
                 handleStartRecording();
-              } else if (userPlan?.plan == "pro") {
+              } else if (
+                storedLoginState === "false" &&
+                userPlan?.plan == "pro"
+              ) {
                 setStartRecordings("startRecordings");
                 handleStartRecording();
               } else {
