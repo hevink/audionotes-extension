@@ -14,7 +14,7 @@ const AuthScreen = ({ isAuthentications }: any) => {
         </p>
       </div>
 
-      <div className="space-y-3 px-8">
+      <div className="space-y-3 px-8 mb-6">
         <Button
           size={"lg"}
           className="flex items-center font-medium text-base leading-5 w-full bg-gradient-to-br from-[#FF4D00] to-[#FF2600] text-white"
