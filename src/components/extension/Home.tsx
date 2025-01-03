@@ -100,7 +100,7 @@ const HomePage = ({ isAuthentications }: any) => {
   return (
     <>
       <div className="bg-gray-100 flex items-center justify-center">
-        <Card className="w-96 bg-white rounded-[20px] py-2 border-none">
+        <Card className="w-96 bg-white rounded-[20px] border-none">
           {sendMail === "showDetails" ? (
             <EmailShare setSendMail={setSendMail} />
           ) : showLanguagesData === "setShowLanguagesData" ? (
@@ -150,9 +150,9 @@ const HomePage = ({ isAuthentications }: any) => {
                 isAuthentications={isAuthentications}
               />
               {/* Tabs */}
-              <div className="flex mb-6 border">
+              <div className="flex mb-[38px] border">
                 <button
-                  className={`flex-1 font-semibold transition-colors text-base p-4 ${
+                  className={`flex-1 font-semibold leading-5 text-base p-4 ${
                     activeTab === "audio"
                       ? "border-b-2 border-primary text-gray-900"
                       : "border-b-2 border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
@@ -162,14 +162,14 @@ const HomePage = ({ isAuthentications }: any) => {
                   Record Audio
                 </button>
                 <button
-                  className={`flex-1 font-semibold flex items-center justify-center gap-2 text-base transition-colors p-4 ${
+                  className={`flex-1 font-semibold leading-5 flex items-center justify-center gap-1 text-base p-4 ${
                     activeTab === "files"
                       ? "border-b-2 border-primary text-gray-900"
                       : "border-b-2 border-gray-100 text-[#9A9A9A] bg-[#F8F8F8]"
                   }`}
                   onClick={() => handleTabSwitch("files")}
                 >
-                  <FileText className="w-5 h-5" />
+                  <FileText className="size-4" />
                   Recent Files
                 </button>
               </div>

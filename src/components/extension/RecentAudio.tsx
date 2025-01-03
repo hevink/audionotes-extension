@@ -46,18 +46,18 @@ const RecentAudio = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="text-center mb-4 px-4">
-      <p className="text-sm text-active font-medium mb-2 mt-9">
+    <form onSubmit={handleSubmit} className="text-center px-4">
+      <p className="text-sm text-active font-medium mb-2 leading-5">
         To record zoom/google meet call click on include system audio
       </p>
       <div className="space-y-2">
         <div
           onClick={() => setShowLanguagesData("setShowLanguagesData")}
-          className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA] cursor-pointer"
+          className="flex justify-between gap-2 items-center px-4 py-[14px] rounded-full border border-gray-200 bg-inactive cursor-pointer"
         >
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-1.5">
             <InputLanguageIcon />
-            <span className="text-gray-600 font-medium text-heading text-base">
+            <span className="text-heading font-medium leading-5 text-base">
               Input Language - Autodetect
             </span>
           </div>
@@ -68,11 +68,11 @@ const RecentAudio = ({
         </div>
         <div
           onClick={toggleDropdown}
-          className="flex justify-between gap-2 items-center px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA] cursor-pointer"
+          className="flex justify-between gap-2 items-center px-4 py-[14px] rounded-full bg-gray-50 border border-gray-200 bg-inactive cursor-pointer"
         >
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-1.5 cursor-pointer">
             <HeadphoneIcon />
-            <span className="text-gray-600 font-medium text-heading text-base">
+            <span className="font-medium text-heading text-base">
               Audio -{" "}
               {selectedAudioDevice
                 ? cleanDeviceLabel(selectedAudioDevice.label)
@@ -90,7 +90,7 @@ const RecentAudio = ({
             cleanDeviceLabel={cleanDeviceLabel}
           />
         </div>
-        <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-gray-50 border border-gray-200 bg-[#FAFAFA]">
+        <div className="flex items-center gap-1.5 px-4 py-[14px] rounded-full bg-gray-50 border border-gray-200 bg-inactive">
           <div className="border-2 border-[#A5A5A5] rounded-full h-4 w-4" />
           <span className="text-gray-600 font-medium text-heading text-base">
             Include System Audio

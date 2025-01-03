@@ -4,7 +4,7 @@ const Header = ({ setUpgradePlan, isAuthentications }: any) => {
   const { data: userPlan } = useGetUserPlan() as any;
 
   return (
-    <div className="flex justify-between items-center mb-4 px-4 pt-2">
+    <div className="flex justify-between items-center px-5 py-4">
       <div className="flex items-center gap-2">
         <div className="bg-primary p-1 rounded-lg">
           <img src="/logo.png" alt="logo" className="w-5 h-5" />

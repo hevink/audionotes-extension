@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useGetLanguages } from "../../queries";
-import LeftArrowIcon from "../../assets/icons/LeftArrowIcon";
+import { LeftArrowIcon } from "../../assets/icons/LeftArrowIcon";
 
 const ShowLanguage = ({ setShowLanguagesData }: any) => {
   const { data: languages = [], isLoading } = useGetLanguages();
