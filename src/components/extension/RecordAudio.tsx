@@ -24,7 +24,6 @@ interface RecorderProps {
   mediaRecorder?: MediaRecorder;
   togglePauseResume: () => void;
   isRecordingAllow: boolean;
-  finalTime: number;
   recordingStopped: boolean;
   setRecordingStopped: (value: boolean) => void;
   setRecordingStarted: (value: boolean) => void;
@@ -36,7 +35,6 @@ interface RecorderProps {
   isTextPending: boolean;
   setUpgradePlan: (upgradePlan: string) => void;
   setUpgradeToProScreen: (upgradePlan: string) => void;
-  setIsRecordingAllow: (value: boolean) => void;
 }
 
 const RecordAudio = ({
@@ -46,7 +44,6 @@ const RecordAudio = ({
   mediaRecorder,
   togglePauseResume,
   isRecordingAllow,
-  finalTime,
   recordingStopped,
   setRecordingStopped,
   setRecordingStarted,
@@ -58,7 +55,6 @@ const RecordAudio = ({
   isTextPending,
   setUpgradePlan,
   setUpgradeToProScreen,
-  setIsRecordingAllow,
 }: RecorderProps) => {
   const [recordingBlobState, setRecordingBlobState] = useState<Blob | null>(
     null
@@ -146,9 +142,20 @@ const RecordAudio = ({
               }/storage/v1/object/public/audionotes_app/${key}`;
               setAudioUrl(publicUrl);
               setStatus("Generating notes...");
+              // if (plan?.plan === "pro") {
+              //   setActiveTab("files");
+              //   // setStartRecordings("");
+              // } else if (plan?.plan === "free") {
+              //   // setUpgradePlan("upgradePlan");
+              //   // setStartRecordings("");
+              // } else if (plan?.plan === "personal") {
+              //   setUpgradeToProScreen("proScreen");
+              //   // setStartRecordings("");
+              // }
               resolve();
             },
           });
+          console.log(upload, "upload");
 
           // Check if there are any previous uploads to continue.
           return upload.findPreviousUploads().then((previousUploads) => {
@@ -240,21 +247,12 @@ const RecordAudio = ({
     if (plan?.plan === "pro") {
       setActiveTab("files");
       setStartRecordings("");
-      handleStopRecording();
-      stopRecording();
-      setIsRecordingAllow(false);
     } else if (plan?.plan === "free") {
       setUpgradePlan("upgradePlan");
       setStartRecordings("");
-      handleStopRecording();
-      stopRecording();
-      setIsRecordingAllow(false);
     } else if (plan?.plan === "personal") {
       setUpgradeToProScreen("proScreen");
       setStartRecordings("");
-      handleStopRecording();
-      stopRecording();
-      setIsRecordingAllow(false);
     }
 
     if (error) {

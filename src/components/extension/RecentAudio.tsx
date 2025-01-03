@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import InputLanguageIcon from "../../assets/icons/InputLanguageIcon";
 import HeadphoneIcon from "../../assets/icons/HeadphoneIcon";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import RecordIcon from "../../assets/icons/RecordIcon";
 import AudioDropdown from "./AudioDropdown";
@@ -15,7 +15,7 @@ const RecentAudio = ({
   handleStartRecording,
   isAuthentications,
   setUpgradeToProScreen,
-  isLogin,
+  storedLoginState,
 }: any) => {
   const { data: userPlan } = useGetUserPlan() as any;
 
@@ -115,16 +115,21 @@ const RecentAudio = ({
           variant={"primary"}
           id="start"
           onClick={() => {
-            if (
-              isAuthentications &&
-              (userPlan?.plan == "free" || userPlan?.plan === "personal")
-            ) {
-              setUpgradeToProScreen("proScreen");
-            } else if (isAuthentications && userPlan?.plan == "pro") {
-              setStartRecordings("startRecordings");
-              handleStartRecording();
-            } else {
-              window.open("https://home.audionotes.app/", "_blank");
+            if (isAuthentications) {
+              if (storedLoginState === "true" && userPlan?.plan !== "pro") {
+                setUpgradeToProScreen("proScreen");
+              } else if (
+                storedLoginState === "false" &&
+                (userPlan?.plan == "free" || userPlan?.plan === "personal")
+              ) {
+                setStartRecordings("startRecordings");
+                handleStartRecording();
+              } else if (userPlan?.plan == "pro") {
+                setStartRecordings("startRecordings");
+                handleStartRecording();
+              } else {
+                window.open("https://home.audionotes.app/", "_blank");
+              }
             }
           }}
         >

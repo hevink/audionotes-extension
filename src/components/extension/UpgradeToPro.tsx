@@ -71,6 +71,7 @@ const UpgradeToPro = ({
         onClick={() => {
           setStartRecordings("startRecordings");
           handleStartRecording();
+          sessionStorage.setItem("isFirstTimeLogin", "false");
         }}
       >
         Continue to Start Recording <RightArrowIcon color="#454545" />

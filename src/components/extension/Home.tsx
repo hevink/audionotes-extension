@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Card } from "../ui/card";
 import { FileText } from "lucide-react";
 import EmailShare from "./EmailShare";
@@ -16,9 +16,9 @@ import UpgradeToPro from "./UpgradeToPro";
 // ----------------------------------------------------------------
 
 const HomePage = ({ isAuthentications }: any) => {
-  const isLogin = sessionStorage.getItem("isFirstTimeLogin");
-  console.log(isLogin);
+  const storedLoginState = sessionStorage.getItem("isFirstTimeLogin");
 
+  //
   const [activeTab, setActiveTab] = useState("audio");
   const [sendMail, setSendMail] = useState("");
   const [showLanguagesData, setShowLanguagesData] = useState("");
@@ -26,13 +26,10 @@ const HomePage = ({ isAuthentications }: any) => {
   const [upgradePlan, setUpgradePlan] = useState("");
   const [upgradeToProScreen, setUpgradeToProScreen] = useState("");
 
-  //
+  // recording states ...
   const [isRecordingAllow, setIsRecordingAllow] = useState(true);
-  const [finalTime, setFinalTime] = useState<number>(0); // State to hold the final time
   const [recordingStopped, setRecordingStopped] = useState(false); // State to track if recording is stopped
   const [recordingStarted, setRecordingStarted] = useState(false); // State to track if recording has started
-
-  //
   const [isAudioPending, setIsAudioPending] = useState(false);
   const [isTextPending, setIsTextPending] = useState(false);
 
@@ -66,7 +63,6 @@ const HomePage = ({ isAuthentications }: any) => {
       // Stop the recording if it was started and not already stopped
       stopRecording();
       setIsRecordingAllow(false);
-      setFinalTime(recordingTime); // Save the last recorded time
       setRecordingStopped(true); // Mark recording as stopped
     } else {
       // Restart recording if it was canceled or stopped
@@ -113,7 +109,6 @@ const HomePage = ({ isAuthentications }: any) => {
               mediaRecorder={mediaRecorder}
               togglePauseResume={togglePauseResume}
               isRecordingAllow={isRecordingAllow}
-              finalTime={finalTime}
               recordingStopped={recordingStopped}
               setRecordingStopped={setRecordingStopped}
               setRecordingStarted={setRecordingStarted}
@@ -125,7 +120,6 @@ const HomePage = ({ isAuthentications }: any) => {
               isAudioPending={isAudioPending}
               setUpgradePlan={handleUpgradePlan}
               setUpgradeToProScreen={setUpgradeToProScreen}
-              setIsRecordingAllow={setIsRecordingAllow}
             />
           ) : upgradePlan === "upgradePlan" ? (
             <UpgradePlan
@@ -182,7 +176,7 @@ const HomePage = ({ isAuthentications }: any) => {
                   handleStartRecording={handleStartRecording}
                   isAuthentications={isAuthentications}
                   setUpgradeToProScreen={setUpgradeToProScreen}
-                  isLogin={isLogin}
+                  storedLoginState={storedLoginState}
                 />
               ) : isAuthentications ? (
                 <RecentFile

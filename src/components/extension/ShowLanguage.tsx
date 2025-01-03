@@ -69,14 +69,14 @@ const ShowLanguage = ({ setShowLanguagesData }: any) => {
             ))}
           </div>
 
-            <Button
-              onClick={() => setShowLanguagesData(selectedLanguage)}
-              variant={"secondary"}
-              size="lg"
-              className="w-full mt-4"
-            >
-              Save
-            </Button>
+          <Button
+            onClick={() => setShowLanguagesData(selectedLanguage)}
+            variant={"secondary"}
+            size="lg"
+            className="w-full mt-4"
+          >
+            Save
+          </Button>
         </>
       )}
     </div>
