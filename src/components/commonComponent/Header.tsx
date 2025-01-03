@@ -12,7 +12,7 @@ const Header = ({ setUpgradePlan, isAuthentications }: any) => {
         </h1>
       </div>
 
-      {isLoading ? (
+      {isLoading && isAuthentications ? (
         <div />
       ) : (
         <>

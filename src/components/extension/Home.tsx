@@ -197,7 +197,7 @@ const HomePage = ({ isAuthentications }: any) => {
                   storedLoginState={storedLoginState}
                   selectedLanguage={selectedLanguage}
                 />
-              ) : isAuthentications || !isUserLoading ? (
+              ) : isAuthentications ? (
                 <RecentFile
                   setSendMail={setSendMail}
                   handleStartRecording={handleStartRecording}
@@ -205,9 +205,9 @@ const HomePage = ({ isAuthentications }: any) => {
                   isAuthentications={isAuthentications}
                   setUpgradeToProScreen={setUpgradeToProScreen}
                 />
-              ) : !isAuthentications && !isUserLoading ? (
+              ) : (
                 <AuthScreen isAuthentications={isAuthentications} />
-              ) : null}
+              )}
             </>
           )}
         </div>
