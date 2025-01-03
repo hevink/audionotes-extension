@@ -1,6 +1,6 @@
 //
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, Download, LoaderCircle, X } from "lucide-react";
+import { ArrowLeft, Download, LoaderCircle, Play, X } from "lucide-react";
 import * as tus from "tus-js-client";
 import { LiveAudioVisualizer } from "react-audio-visualize";
 // Components ...
@@ -36,6 +36,7 @@ interface RecorderProps {
   isTextPending: boolean;
   setUpgradePlan: (upgradePlan: string) => void;
   setUpgradeToProScreen: (upgradePlan: string) => void;
+  isPaused: boolean;
 }
 
 const RecordAudio = ({
@@ -56,6 +57,7 @@ const RecordAudio = ({
   isTextPending,
   setUpgradePlan,
   setUpgradeToProScreen,
+  isPaused,
 }: RecorderProps) => {
   const [recordingBlobState, setRecordingBlobState] = useState<Blob | null>(
     null
@@ -364,7 +366,7 @@ const RecordAudio = ({
               onClick={handleCancelRecording}
               className="flex flex-col items-center"
             >
-              <div className="p-2 border rounded-full">
+              <div className="p-2 border rounded-full cursor-pointer">
                 <X className="text-subheading" />
               </div>
               <p className="mt-5 font-medium text-sm leading-4 text-heading">
@@ -384,11 +386,17 @@ const RecordAudio = ({
               onClick={() => togglePauseResume()}
               className="flex flex-col items-center"
             >
-              <div className="p-2 border rounded-full">
-                <PauseIcon />
-              </div>
-              <p className="mt-5 font-medium text-sm leading-4 text-heading">
-                Pause
+              {isPaused ? (
+                <div className="p-2 border rounded-full cursor-pointer">
+                  <Play fill="#A0A0A0" className="h-5 w-5 text-subheading" />
+                </div>
+              ) : (
+                <div className="p-2 border rounded-full cursor-pointer">
+                  <PauseIcon />
+                </div>
+              )}
+              <p className="mt-5 font-medium text-sm leading-4 text-heading max-w-[40px]">
+                {isPaused ? "Resume" : "Pause"}
               </p>
             </div>
           </div>

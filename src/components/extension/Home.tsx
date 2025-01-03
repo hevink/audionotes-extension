@@ -46,6 +46,7 @@ const HomePage = ({ isAuthentications }: any) => {
     recordingBlob,
     mediaRecorder,
     togglePauseResume,
+    isPaused,
   } = useAudioRecorder();
 
   // For caching first language from API ...
@@ -136,6 +137,7 @@ const HomePage = ({ isAuthentications }: any) => {
               isAudioPending={isAudioPending}
               setUpgradePlan={handleUpgradePlan}
               setUpgradeToProScreen={setUpgradeToProScreen}
+              isPaused={isPaused}
             />
           ) : upgradePlan === "upgradePlan" ? (
             <UpgradePlan
