@@ -177,7 +177,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
           </div>
           {!isLast && <div className="border-[1px] border-[#F1F5FA] mt-2" />}
         </div>
-      ) : note.is_ready !== "no" ? (
+      ) : note.is_ready === "no" ? (
         <div className="flex  gap-2">
           <Skeleton className="size-6" />
           <div className="flex flex-col gap-2 w-full">
