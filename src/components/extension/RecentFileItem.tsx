@@ -175,7 +175,6 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
               </div>
             </div>
           </div>
-          {!isLast && <div className="border-[1px] border-[#F1F5FA] mt-2" />}
         </div>
       ) : note.is_ready === "no" ? (
         <div className="flex  gap-2">
@@ -183,7 +182,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
           <div className="flex flex-col gap-2 w-full">
             <div className="flex items-center gap-2">
               <Loader2 className="size-5 text-subheading animate-spin" />
-              <p className="text-sm text-medium ">
+              <p className="text-heading leading-6 font-medium text-base animate-pulse">
                 AI is generating your notes
               </p>
             </div>
@@ -201,7 +200,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
             <div className="bg-plain rounded-full p-1">
               <AlertCircle className="w-5 h-5 text-white" fill="#FF3300" />
             </div>
-            <span className="font-medium">
+            <span className="text-heading leading-6 font-medium text-base">
               {note.title ?? "Processing Failed"}
             </span>
           </div>
@@ -210,6 +209,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
           </p>
         </div>
       )}
+      {!isLast && <div className="border-[1px] border-[#F1F5FA] mt-2" />}
     </div>
   );
 };
