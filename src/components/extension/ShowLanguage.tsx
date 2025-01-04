@@ -47,8 +47,6 @@ const ShowLanguage: React.FC<ShowLanguageProps> = ({
           <ScrollArea className="h-[388px] pr-4">
             <div className="" tabIndex={0}>
               {languages.map((language: any, index: number) => {
-                console.log(language, "language");
-
                 return (
                   <div
                     key={language.id}

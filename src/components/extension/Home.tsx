@@ -98,7 +98,6 @@ const HomePage: React.FC<HomePageProps> = ({
     startRecording();
     setRecordingStarted(true);
     setRecordingStopped(false); // Reset stopped state
-    console.log("ahhh ....");
   }, [startRecording]);
 
   //
@@ -108,10 +107,8 @@ const HomePage: React.FC<HomePageProps> = ({
       stopRecording();
       setIsRecordingAllow(false);
       setRecordingStopped(true); // Mark recording as stopped
-      console.log("Greate ...");
     } else {
       // Restart recording if it was canceled or stopped
-      console.log("ahhh ....");
 
       handleStartRecording();
       setRecordingStopped(false); // Reset stopped state
