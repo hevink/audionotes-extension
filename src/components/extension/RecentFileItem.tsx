@@ -103,6 +103,9 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
     }
   };
 
+  console.log(note);
+  
+
   return (
     <div
       className={cn("space-y-2", !isLast && "border-b border-[#F1F5FA] pb-2")}

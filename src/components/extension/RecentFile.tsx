@@ -24,7 +24,7 @@ const RecentFile: React.FC<RecentFileProps> = ({
   const { data: userPlan } = useGetUserPlan() as any;
 
   return (
-    <div className="space-y-4 px-5 py-4">
+    <div className="space-y-2 px-5 py-4">
       {isNotesLoading ? (
         <div className="h-[272px] flex items-center justify-center">
           <Loader2 className="h-8 animate-spin text-primary" />
