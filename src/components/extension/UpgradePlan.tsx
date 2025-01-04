@@ -16,6 +16,12 @@ import {
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
 
+interface UpgradePlanProps {
+  setUpgradePlan: (value: string) => void;
+  setUpgradeToProScreen: (value: string) => void;
+  setActiveTab: (value: string) => void;
+}
+
 const plansTitles = [
   {
     icon: <MicIcon />,
@@ -79,11 +85,11 @@ const plansTitles = [
   },
 ];
 
-const UpgradePlan = ({
+const UpgradePlan: React.FC<UpgradePlanProps> = ({
   setUpgradePlan,
   setUpgradeToProScreen,
   setActiveTab,
-}: any) => {
+}) => {
   return (
     <div className="p-4">
       {/* Header Section */}

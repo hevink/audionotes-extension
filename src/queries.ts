@@ -57,7 +57,7 @@ export const createNote = async ({
   accessToken: string;
 }) => {
   try {
-    const response = await axios.post(
+    const response = await axios.post<Record<string, any>>(
       `${import.meta.env.VITE_BACKEND_URL}/api/notes`,
       {
         platform: "webapp",
@@ -76,18 +76,26 @@ export const createNote = async ({
     );
 
     return { data: response.data };
-  } catch (error: any) {
-    let errorMessage;
-    if (error.response.data.statusCode === 422) {
-      errorMessage = `${error.response.data.message
-        .map((e: any) => e.property)
-        .join(" ,")} not provided`;
-    } else {
-      errorMessage = error.response.data.message;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data) {
+      let errorMessage: string;
+
+      if (error.response.data.statusCode === 422) {
+        errorMessage = `${(
+          error.response.data.message as Array<{ property: string }>
+        )
+          .map((e) => e.property)
+          .join(", ")} not provided`;
+      } else {
+        errorMessage = error.response.data.message as string;
+      }
+
+      console.error("Error creating note:", error);
+      return { error: errorMessage };
     }
 
-    console.error("Error creating note:", error);
-    return { error: errorMessage };
+    console.error("Unexpected error:", error);
+    return { error: "An unexpected error occurred" };
   }
 };
 

@@ -2,14 +2,23 @@ import { Mic, X } from "lucide-react";
 import { Button } from "../ui/button";
 import RightArrowIcon from "../../assets/icons/RightArrowIcon";
 
-const UpgradeToPro = ({
+interface UpgradeToProProps {
+  setStartRecordings: (value: string) => void;
+  handleStartRecording: () => void;
+  setActiveTab: (value: string) => void;
+  setUpgradeToProScreen: (value: string) => void;
+  setUpgradePlan: (value: string) => void;
+  setIsFirstTimeLogin: (value: string) => void;
+}
+
+const UpgradeToPro: React.FC<UpgradeToProProps> = ({
   setStartRecordings,
   handleStartRecording,
   setActiveTab,
   setUpgradeToProScreen,
   setUpgradePlan,
   setIsFirstTimeLogin,
-}: any) => {
+}) => {
   const handleUpgradeToPro = () => {
     setUpgradeToProScreen("");
     setStartRecordings("startRecordings");
@@ -20,18 +29,6 @@ const UpgradeToPro = ({
 
   return (
     <div className="p-5">
-      {/* <div className="flex items-center justify-center gap-2">
-        <div className="bg-primary p-1 rounded-lg">
-          <Mic className="w-4 h-4 text-white" />
-        </div>
-        <h1 className="text-base font-semibold">
-          Audionotes<span className="text-primary">.app</span>
-        </h1>
-
-        <div className="bg-plain rounded-full p-1 cursor-pointer">
-          <X className="h-5 w-5 text-subheading" />
-        </div>
-      </div> */}
       <div className="flex items-center justify-between">
         {/* Left Side: Mic Icon and Title */}
         <div className="flex items-center space-x-2">

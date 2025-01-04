@@ -8,7 +8,17 @@ import AudioDropdown from "./AudioDropdown";
 import { useGetUserPlan } from "../../queries";
 import { PrimaryArrowIcon } from "../../assets/icons/LeftArrowIcon";
 
-const RecentAudio = ({
+interface RecentAudioProps {
+  setShowLanguagesData: (value: string) => void;
+  setStartRecordings: (value: string) => void;
+  handleStartRecording: () => void;
+  isAuthentications: boolean;
+  setUpgradeToProScreen: (value: string) => void;
+  storedLoginState: string | null;
+  selectedLanguage: string | null | undefined | any;
+}
+
+const RecentAudio: React.FC<RecentAudioProps> = ({
   setShowLanguagesData,
   setStartRecordings,
   handleStartRecording,
@@ -16,7 +26,7 @@ const RecentAudio = ({
   setUpgradeToProScreen,
   storedLoginState,
   selectedLanguage,
-}: any) => {
+}) => {
   const { data: userPlan, isLoading } = useGetUserPlan() as any;
 
   const [selectedAudioDevice, setSelectedAudioDevice] = useState<any>(null);
@@ -86,7 +96,6 @@ const RecentAudio = ({
             onDeviceSelect={setSelectedAudioDevice}
             setIsOpen={setIsOpen}
             isOpen={isOpen}
-            toggleDropdown={toggleDropdown}
             cleanDeviceLabel={cleanDeviceLabel}
           />
         </div>

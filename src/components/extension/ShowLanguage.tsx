@@ -3,7 +3,18 @@ import { Button } from "../ui/button";
 import { LeftArrowIcon } from "../../assets/icons/LeftArrowIcon";
 import { ScrollArea } from "../ui/scroll-area";
 
-const ShowLanguage = ({
+interface ShowLanguageProps {
+  setShowLanguagesData: (value: string) => void;
+  languages: string[];
+  isLoading: boolean;
+  selectedIndex: number | null;
+  setSelectedIndex: (index: number) => void;
+  selectedLanguage: null | any;
+  setSelectedLanguage: (language: string) => void;
+  handleUpdate: (languageCode: string) => void;
+}
+
+const ShowLanguage: React.FC<ShowLanguageProps> = ({
   setShowLanguagesData,
   languages,
   isLoading,
@@ -12,7 +23,7 @@ const ShowLanguage = ({
   selectedLanguage,
   setSelectedLanguage,
   handleUpdate,
-}: any) => {
+}) => {
   return (
     <div className="p-4">
       <div className="relative flex items-center justify-center mb-8">

@@ -1,6 +1,9 @@
 import { Button } from "../ui/button";
 
-const AuthScreen = ({ isAuthentications }: any) => {
+interface AuthScreenProps {
+  isAuthentications: boolean;
+}
+const AuthScreen: React.FC<AuthScreenProps> = ({ isAuthentications }) => {
   return (
     <div className="">
       <div className="flex flex-col justify-center items-center space-y-2 max-w-[253px] mx-auto py-32">

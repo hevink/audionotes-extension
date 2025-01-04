@@ -11,7 +11,7 @@ type RecentFileProps = {
   setStartRecordings: (value: string) => void;
   isAuthentications: boolean;
   setUpgradeToProScreen: (value: string) => void;
-  storedLoginState: string;
+  storedLoginState: string | null;
 };
 
 const RecentFile: React.FC<RecentFileProps> = ({

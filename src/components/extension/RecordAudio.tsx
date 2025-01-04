@@ -30,7 +30,7 @@ interface RecorderProps {
   setRecordingStarted: (value: boolean) => void;
   handleStopRecording: () => void;
   handlePending: (type: "text" | "audio", value: boolean) => void;
-  setActiveTab: (tab: string) => void;
+  setActiveTab: (tab: "audio" | "files") => void;
   setStartRecordings: (recording: string) => void;
   isAudioPending: boolean;
   isTextPending: boolean;
@@ -136,7 +136,7 @@ const RecordAudio = ({
               cacheControl: "3600",
             },
             chunkSize: 6 * 1024 * 1024,
-            onError: (error: any) => {
+            onError: (error) => {
               console.error("Failed because: " + error);
               reject(error);
             },

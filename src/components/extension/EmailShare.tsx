@@ -6,8 +6,12 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useState } from "react";
 
-const EmailShare = ({ setSendMail }: any) => {
-  const [email, setEmail] = useState("");
+interface EmailShareProps {
+  setSendMail: (value: string) => void;
+}
+
+const EmailShare: React.FC<EmailShareProps> = ({ setSendMail }) => {
+  const [email, setEmail] = useState<string>("");
   return (
     <div className="p-4 space-y-4">
       <div className="relative flex items-center justify-center">

@@ -14,7 +14,13 @@ import { useGetLanguages, useGetUser, useUpdateUser } from "../../queries";
 
 // ----------------------------------------------------------------
 
-const HomePage = ({
+interface HomePageProps {
+  isAuthentications: boolean | null;
+  isFirstTimeLogin: boolean | string | null;
+  setIsFirstTimeLogin: (value: boolean) => void;
+}
+
+const HomePage: React.FC<HomePageProps> = ({
   isAuthentications,
   isFirstTimeLogin,
   setIsFirstTimeLogin,
@@ -43,7 +49,7 @@ const HomePage = ({
   const { data: user } = useGetUser();
   const updateUserMutation = useUpdateUser();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [selectedLanguage, setSelectedLanguage] = useState("");
 
   const {
     startRecording,
@@ -83,7 +89,7 @@ const HomePage = ({
     });
   };
 
-  const handleTabSwitch = (tab: any) => {
+  const handleTabSwitch = (tab: string) => {
     setActiveTab(tab);
   };
 

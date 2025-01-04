@@ -3,12 +3,17 @@ import HomePage from "./components/extension/Home";
 import { useIsAuthenticated } from "./lib/auth";
 import { useGetUserPlan } from "./queries";
 
-const App = () => {
-  const isAuthenticated: any = useIsAuthenticated();
-  const { data: userPlan } = useGetUserPlan() as any;
-  const [isFirstTimeLogin, setIsFirstTimeLogin] = useState(
-    localStorage.getItem("isFirstTimeLogin")
-  );
+interface UserPlan {
+  plan: string;
+}
+
+const App: React.FC = () => {
+  const isAuthenticated: boolean | null = useIsAuthenticated();
+  const { data: userPlan } = useGetUserPlan() as { data: UserPlan | undefined };
+
+  const [isFirstTimeLogin, setIsFirstTimeLogin] = useState<
+    string | null | boolean
+  >(localStorage.getItem("isFirstTimeLogin"));
 
   useEffect(() => {
     if (isAuthenticated) {
