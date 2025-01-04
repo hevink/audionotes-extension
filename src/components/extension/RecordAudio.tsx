@@ -370,21 +370,21 @@ const RecordAudio = ({
       </div>
       <div className="mt-12 px-5">
         {isRecordingAllow ? (
-          <div className="flex items-start justify-between">
+          <div className="flex items-center justify-between">
             <div
               onClick={handleCancelRecording}
               className="flex flex-col items-center"
             >
-              <div className="p-2 border rounded-full cursor-pointer">
-                <X className="text-subheading" />
+              <div className="p-2 border rounded-full cursor-pointer relative">
+                <X className="text-subheading size-5" />
               </div>
-              <p className="mt-5 font-medium text-sm leading-4 text-heading">
+              <p className="mt-5 font-medium text-sm leading-4 text-heading absolute bottom-7 left-[39px]">
                 Cancel
               </p>
             </div>
             <Button
               size={"lg"}
-              className="flex items-center font-medium text-base leading-5"
+              className="flex items-center gap-1 font-medium text-base leading-5 py-5"
               variant={"primary"}
               onClick={handleStopRecording}
             >
@@ -393,18 +393,18 @@ const RecordAudio = ({
             </Button>
             <div
               onClick={() => togglePauseResume()}
-              className="flex flex-col items-center"
+              className="flex flex-col items-center "
             >
               {isPaused ? (
                 <div className="p-2 border rounded-full cursor-pointer">
-                  <Play fill="#A0A0A0" className="h-5 w-5 text-subheading" />
+                  <Play fill="#A0A0A0" className="h-5 w-5 text-subheading relative" />
                 </div>
               ) : (
-                <div className="p-2 border rounded-full cursor-pointer">
+                <div className="p-2 border rounded-full cursor-pointer relative">
                   <PauseIcon />
                 </div>
               )}
-              <p className="mt-5 font-medium text-sm leading-4 text-heading max-w-[40px]">
+              <p className="mt-5 font-medium text-sm leading-4 text-heading max-w-[40px]  absolute bottom-7 right-[39px]">
                 {isPaused ? "Resume" : "Pause"}
               </p>
             </div>
