@@ -9,8 +9,12 @@
     "http://*/*",
     "https://*/*"
   ],
-  "permissions": ["storage", "tabs", "activeTab", "tabCapture"],
-  "icons": {
-    "128": "icon_128.png"
-  }
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "cookies",
+    "tabCapture",
+    "audioCapture"
+  ]
 }
