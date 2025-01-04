@@ -103,9 +103,6 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
     }
   };
 
-  console.log(note);
-  
-
   return (
     <div
       className={cn("space-y-2", !isLast && "border-b border-[#F1F5FA] pb-2")}
@@ -140,7 +137,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
 
             <div className="space-y-1">
               <p className="text-heading leading-6 font-medium text-base">
-              {truncateText(note.title!)}
+                {truncateText(note.title!)}
               </p>
 
               <p className="flex items-center space-x-2 text-date text-sm font-medium">

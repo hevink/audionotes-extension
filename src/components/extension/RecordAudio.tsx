@@ -87,111 +87,6 @@ const RecordAudio = ({
     return data;
   };
 
-  // const handleFileUpload = useCallback(
-  //   async (blob: Blob | File, type: "image" | "audio") => {
-  //     try {
-  //       if (!blob) {
-  //         throw new Error(
-  //           type === "audio"
-  //             ? "Please select or record an audio"
-  //             : "Please select an image"
-  //         );
-  //       }
-
-  //       // Get fresh session before upload
-  //       const {
-  //         data: { session },
-  //         error: sessionError,
-  //       } = await supabase.auth.getSession();
-
-  //       if (sessionError || !session) {
-  //         throw new Error("Authentication required");
-  //       }
-
-  //       let key =
-  //         type === "image" ? `image_${randomBytes(20)}` : randomBytes(20);
-
-  //       if (blob.type.includes("webm")) {
-  //         key = `${key}.webm`;
-  //       } else if (blob.type.includes("mp4")) {
-  //         key = `${key}.mp4`;
-  //       }
-
-  //       new Promise<void>((resolve, reject) => {
-  //         const upload = new tus.Upload(blob, {
-  //           endpoint: `${
-  //             import.meta.env.VITE_SUPABASE_URL
-  //           }/storage/v1/upload/resumable`,
-  //           retryDelays: [0, 3000, 5000, 10000, 20000],
-  //           headers: {
-  //             authorization: `Bearer ${session.access_token}`,
-  //             "x-upsert": "true",
-  //           },
-  //           uploadDataDuringCreation: true,
-  //           removeFingerprintOnSuccess: true,
-  //           metadata: {
-  //             bucketName: import.meta.env.VITE_SUPABASE_BUCKET!,
-  //             objectName: key,
-  //             contentType: blob.type,
-  //             cacheControl: "3600",
-  //           },
-  //           chunkSize: 6 * 1024 * 1024, // NOTE: it must be set to 6MB (for now) do not change it
-  //           onError: (error: any) => {
-  //             console.error("Failed because: " + error);
-  //             reject(error);
-  //           },
-  //           onProgress: (bytesUploaded, bytesTotal) => {
-  //             const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(
-  //               2
-  //             );
-  //             setStatus(`Uploading ${percentage}%`);
-  //           },
-  //           onSuccess: () => {
-  //             const publicUrl = `${
-  //               import.meta.env.VITE_SUPABASE_URL
-  //             }/storage/v1/object/public/audionotes_app/${key}`;
-  //             setAudioUrl(publicUrl);
-  //             setStatus("Generating notes...");
-  //             stopRecording();
-  //             setIsRecordingAllow(true);
-
-  //             // if (plan?.plan === "pro") {
-  //             //   setActiveTab("files");
-  //             //   // setStartRecordings("");
-  //             // } else if (plan?.plan === "free") {
-  //             //   // setUpgradePlan("upgradePlan");
-  //             //   // setStartRecordings("");
-  //             // } else if (plan?.plan === "personal") {
-  //             //   setUpgradeToProScreen("proScreen");
-  //             //   // setStartRecordings("");
-  //             // }
-  //             resolve();
-  //           },
-  //         });
-
-  //         // Check if there are any previous uploads to continue.
-  //         return upload.findPreviousUploads().then((previousUploads) => {
-  //           // Found previous uploads so we select the first one.
-  //           if (previousUploads.length) {
-  //             upload.resumeFromPreviousUpload(previousUploads[0]);
-  //           }
-
-  //           // Start the upload
-  //           upload.start();
-  //         });
-  //       });
-  //     } catch (err) {
-  //       handlePending("audio", false);
-  //       setStatus("Generation failed");
-  //       // errorToast(`${err}`);
-  //       console.log(err, "err");
-  //     } finally {
-  //       setStatus("");
-  //     }
-  //   },
-  //   [handlePending]
-  // );
-
   const handleFileUpload = useCallback(
     async (blob: Blob | File, type: "image" | "audio") => {
       try {
@@ -277,15 +172,6 @@ const RecordAudio = ({
     [handlePending]
   );
 
-  // Memoize handleRecording with an extra step to control repetitive calls.
-  const stableHandleRecording = useCallback(
-    async (blob: Blob) => {
-      handlePending("audio", true);
-      await handleFileUpload(blob, "audio");
-    },
-    [handleFileUpload, handlePending]
-  );
-
   const handleDownloadAudio = useCallback(() => {
     if (recordingBlobState) {
       const url = URL.createObjectURL(recordingBlobState);
@@ -314,92 +200,6 @@ const RecordAudio = ({
     setRecordingBlobState(null);
     setShouldProcessRecording(false);
   }, [stopRecording, setIsCancelled, setRecordingStopped]);
-
-  // const sendNoteToAPI = useCallback(async () => {
-  //   if (!accessToken) {
-  //     // errorToast("Authentication error. Please try logging in again.");
-  //     handlePending("audio", false);
-  //     handlePending("text", false);
-  //     return;
-  //   }
-
-  //   if (
-  //     (noteType === "upload" || noteType === "audio" || noteType == "image") &&
-  //     !audioUrl
-  //   ) {
-  //     return;
-  //   }
-
-  //   if (noteType === "youtube") {
-  //     setStatus("Processing Youtube video...");
-  //   }
-
-  //   if (noteType === "text" && !inputText) {
-  //     return;
-  //   }
-
-  //   const { error } = await createNote({
-  //     noteType,
-  //     audioUrl,
-  //     youtubeUrl,
-  //     imageUrl,
-  //     text: inputText,
-  //     audioFilename: audioUrl?.split("/").pop() || "",
-  //     device: navigator?.userAgent ?? "Web",
-  //     accessToken,
-  //   });
-
-  //   // Reset all recording-related states regardless of plan type
-  //   const resetRecordingStates = () => {
-  //     setRecordingStopped(true);
-  //     setRecordingBlobState(null);
-  //     setRecordingStarted(false);
-  //     setIsCancelled(true);
-  //     handlePending("audio", false);
-  //     handlePending("text", false);
-  //     setNoteType("audio");
-  //     setAudioUrl(undefined);
-  //     setYoutubeUrl(undefined);
-  //     setInputText(undefined);
-  //     setImageUrl(undefined);
-  //     setStatus("");
-  //   };
-
-  //   // Handle navigation based on plan type
-  //   if (plan?.plan === "pro") {
-  //     setActiveTab("files");
-  //     setStartRecordings("");
-  //   } else if (plan?.plan === "free") {
-  //     setUpgradePlan("upgradePlan");
-  //     setStartRecordings("");
-  //   } else if (plan?.plan === "personal") {
-  //     setUpgradeToProScreen("proScreen");
-  //     setStartRecordings("");
-  //   }
-
-  //   // Reset states after navigation logic
-  //   resetRecordingStates();
-
-  //   if (error) {
-  //     console.error("Error sending note to API:", error);
-  //   }
-  // }, [
-  //   noteType,
-  //   audioUrl,
-  //   imageUrl,
-  //   youtubeUrl,
-  //   inputText,
-  //   accessToken,
-  //   handlePending,
-  //   plan,
-  //   setActiveTab,
-  //   setStartRecordings,
-  //   setUpgradePlan,
-  //   setUpgradeToProScreen,
-  //   setRecordingStopped,
-  //   setRecordingStarted,
-  //   setIsCancelled,
-  // ]);
 
   const sendNoteToAPI = useCallback(async () => {
     if (!accessToken || !shouldProcessRecording) {
@@ -485,21 +285,11 @@ const RecordAudio = ({
     }
   }, [recordingStopped, handleStopRecording]);
 
-  // useEffect(() => {
-  //   sendNoteToAPI();
-  // }, [audioUrl, inputText, youtubeUrl, sendNoteToAPI]);
-
   useEffect(() => {
     if (audioUrl && shouldProcessRecording) {
       sendNoteToAPI();
     }
   }, [audioUrl, shouldProcessRecording]);
-
-  // useEffect(() => {
-  //   if (recordingBlob && !isCancelled) {
-  //     setRecordingBlobState(recordingBlob);
-  //   }
-  // }, [recordingBlob]);
 
   // Update recording blob only when recording is stopped
   useEffect(() => {
@@ -507,18 +297,6 @@ const RecordAudio = ({
       setRecordingBlobState(recordingBlob);
     }
   }, [recordingBlob, isCancelled, recordingStopped]);
-
-  // useEffect(() => {
-  //   if (recordingBlobState && !isCancelled) {
-  //     handlePending("audio", true);
-  //     stableHandleRecording(recordingBlobState);
-  //   }
-  // }, [
-  //   recordingBlobState,
-  //   handlePending,
-  //   stableHandleRecording,
-  //   handleFileUpload,
-  // ]);
 
   useEffect(() => {
     if (recordingBlobState && shouldProcessRecording && !isCancelled) {
@@ -616,7 +394,10 @@ const RecordAudio = ({
             >
               {isPaused ? (
                 <div className="p-2 border rounded-full cursor-pointer">
-                  <Play fill="#A0A0A0" className="h-5 w-5 text-subheading relative" />
+                  <Play
+                    fill="#A0A0A0"
+                    className="h-5 w-5 text-subheading relative"
+                  />
                 </div>
               ) : (
                 <div className="p-2 border rounded-full cursor-pointer relative">

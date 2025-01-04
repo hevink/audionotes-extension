@@ -10,8 +10,7 @@ import UpgradePlan from "./UpgradePlan";
 import { useAudioRecorder } from "react-audio-voice-recorder";
 import AuthScreen from "./AuthScreen";
 import UpgradeToPro from "./UpgradeToPro";
-import { useGetLanguages, useGetUser, useGetUserPlan } from "../../queries";
-import { getUser } from "../../action";
+import { useGetLanguages, useGetUser, useUpdateUser } from "../../queries";
 
 // ----------------------------------------------------------------
 
@@ -39,11 +38,12 @@ const HomePage = ({
   // Show language states ...
   const { data: languages = [], isLoading: isGetLanguageLoading } =
     useGetLanguages();
-  const { isLoading } = useGetUserPlan() as any;
+  // const { isLoading } = useGetUserPlan() as any;
 
-  const { isLoading: isUserLoading } = useGetUser();
+  const { data: user, isLoading: isUserLoading } = useGetUser();
+  const updateUserMutation = useUpdateUser();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]?.name);
+  const [selectedLanguage, setSelectedLanguage] = useState();
 
   const {
     startRecording,
@@ -55,12 +55,33 @@ const HomePage = ({
     isPaused,
   } = useAudioRecorder();
 
-  // For caching first language from API ...
+  // Effect to set initial language based on user's input_language code
   useEffect(() => {
-    if (languages.length > 0) {
-      setSelectedLanguage(languages[selectedIndex]);
+    if (user?.input_language?.code && languages.length > 0) {
+      const userLanguage = languages.find(
+        (lang) => lang.code === user.input_language.code
+      );
+      if (userLanguage) {
+        setSelectedLanguage(userLanguage);
+        setSelectedIndex(languages.indexOf(userLanguage));
+      } else {
+        // Fallback to English if user's language not found
+        const defaultLanguage = languages.find(
+          (lang) => lang.code === "autodetect"
+        );
+        if (defaultLanguage) {
+          setSelectedLanguage(defaultLanguage);
+          setSelectedIndex(languages.indexOf(defaultLanguage));
+        }
+      }
     }
-  }, [selectedIndex, languages]);
+  }, [user?.input_language?.code, languages]);
+
+  const handleUpdate = async (code: string) => {
+    updateUserMutation.mutate({
+      input_language: code,
+    });
+  };
 
   const handleTabSwitch = (tab: any) => {
     setActiveTab(tab);
@@ -129,6 +150,7 @@ const HomePage = ({
               setSelectedIndex={setSelectedIndex}
               selectedLanguage={selectedLanguage}
               setSelectedLanguage={setSelectedLanguage}
+              handleUpdate={handleUpdate}
             />
           ) : startRecordings === "startRecordings" ? (
             <RecordAudio
@@ -212,10 +234,6 @@ const HomePage = ({
                   storedLoginState={isFirstTimeLogin}
                   selectedLanguage={selectedLanguage}
                 />
-              ) : isUserLoading || isLoading ? (
-                <div className="h-[272px] flex items-center justify-center">
-                  <Loader2 className="h-8 animate-spin text-primary" />
-                </div>
               ) : isAuthentications ? (
                 <RecentFile
                   setSendMail={setSendMail}
@@ -225,9 +243,9 @@ const HomePage = ({
                   setUpgradeToProScreen={setUpgradeToProScreen}
                   storedLoginState={isFirstTimeLogin}
                 />
-              ) : !isUserLoading || !isLoading ? (
+              ) : (
                 <AuthScreen isAuthentications={isAuthentications} />
-              ) : null}
+              )}
             </>
           )}
         </div>

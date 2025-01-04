@@ -15,7 +15,7 @@ const UpgradeToPro = ({
     setStartRecordings("startRecordings");
     handleStartRecording();
     setIsFirstTimeLogin("false");
-    sessionStorage.setItem("isFirstTimeLogin", "false");
+    localStorage.setItem("isFirstTimeLogin", "false");
   };
 
   return (
