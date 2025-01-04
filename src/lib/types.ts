@@ -2,6 +2,8 @@ import { Database } from "../../database.types";
 
 export type TypeNote = Database["public"]["Tables"]["notes"]["Row"];
 
+export type TypeUser = Database["public"]["Tables"]["users"]["Row"];
+
 export type PartialTypeNote = Pick<
   TypeNote,
   | "id"

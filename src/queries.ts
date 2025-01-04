@@ -1,5 +1,5 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { getLanguages, getUser, getUserPlan } from "./action";
+import { useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
+import { getLanguages, getUser, getUserPlan, updateUser } from "./action";
 import axios from "axios";
 import { PartialTypeNote } from "./lib/types";
 import supabase from "./lib/supabase/client";
@@ -124,7 +124,6 @@ export const useGetInitialNotes = (): UseQueryResult<PartialTypeNote[]> => {
   });
 };
 
-
 export const useGetLanguages = () => {
   return useQuery({
     queryKey: ["languages"],
@@ -138,5 +137,18 @@ export const useGetLanguages = () => {
       return data || [];
     },
     staleTime: STALE_TIME,
+  });
+};
+
+export const useUpdateUser = () => {
+  return useMutation({
+    mutationFn: updateUser,
+    onSuccess: ({ data, error }) => {
+      if (error) {
+        console.error("Error updating user:", error);
+        return;
+      }
+      queryClient.setQueryData(["user"], data);
+    },
   });
 };
