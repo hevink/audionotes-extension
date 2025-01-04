@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { FileText, Loader2 } from "lucide-react";
+import { FileText } from "lucide-react";
 import EmailShare from "./EmailShare";
 import Header from "../commonComponent/Header";
 import RecentAudio from "./RecentAudio";
@@ -40,7 +40,7 @@ const HomePage = ({
     useGetLanguages();
   // const { isLoading } = useGetUserPlan() as any;
 
-  const { data: user, isLoading: isUserLoading } = useGetUser();
+  const { data: user } = useGetUser();
   const updateUserMutation = useUpdateUser();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedLanguage, setSelectedLanguage] = useState();
