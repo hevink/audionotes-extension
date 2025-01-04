@@ -93,18 +93,19 @@ export const createNote = async ({
 
 export const useGetInitialNotes = (): UseQueryResult<PartialTypeNote[]> => {
   return useQuery({
-    queryKey: ["all_notes"],
+    queryKey: ["all_notes", "audio"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("notes")
         .select(
           "id, folder_id, title, created_at, note_type, favourite, public, is_ready, recommendations, note_type, audio_url, media_duration, attached_image_urls, transcript, tags, youtube_url, file_name"
         )
+        .eq("note_type", "audio") // Filter for audio notes
         .order("created_at", { ascending: false })
         .range(0, 3 - 1);
 
       if (error) {
-        console.error("Error getting initial notes:", error);
+        console.error("Error getting initial audio notes:", error);
         return [];
       }
 
@@ -122,6 +123,7 @@ export const useGetInitialNotes = (): UseQueryResult<PartialTypeNote[]> => {
     gcTime: STALE_TIME,
   });
 };
+
 
 export const useGetLanguages = () => {
   return useQuery({
