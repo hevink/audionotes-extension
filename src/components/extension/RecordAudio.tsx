@@ -39,6 +39,7 @@ interface RecorderProps {
   isPaused: boolean;
   setIsCancelled: (value: boolean) => void;
   isCancelled: boolean;
+  setIsRecordingAllow: (value: boolean) => void;
 }
 
 const RecordAudio = ({
@@ -62,11 +63,11 @@ const RecordAudio = ({
   isPaused,
   setIsCancelled,
   isCancelled,
+  setIsRecordingAllow,
 }: RecorderProps) => {
   const [recordingBlobState, setRecordingBlobState] = useState<Blob | null>(
     null
   );
-
   const [status, setStatus] = useState("");
   const [audioUrl, setAudioUrl] = useState<string>();
   const [noteType, setNoteType] = useState<
@@ -76,6 +77,7 @@ const RecordAudio = ({
   const [youtubeUrl, setYoutubeUrl] = useState<string>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [accessToken, setAccessToken] = useState<string | undefined>("");
+  const [shouldProcessRecording, setShouldProcessRecording] = useState(false);
 
   const { data: plan } = useGetUserPlan() as any;
 
@@ -84,6 +86,111 @@ const RecordAudio = ({
     setAccessToken(data?.session?.access_token);
     return data;
   };
+
+  // const handleFileUpload = useCallback(
+  //   async (blob: Blob | File, type: "image" | "audio") => {
+  //     try {
+  //       if (!blob) {
+  //         throw new Error(
+  //           type === "audio"
+  //             ? "Please select or record an audio"
+  //             : "Please select an image"
+  //         );
+  //       }
+
+  //       // Get fresh session before upload
+  //       const {
+  //         data: { session },
+  //         error: sessionError,
+  //       } = await supabase.auth.getSession();
+
+  //       if (sessionError || !session) {
+  //         throw new Error("Authentication required");
+  //       }
+
+  //       let key =
+  //         type === "image" ? `image_${randomBytes(20)}` : randomBytes(20);
+
+  //       if (blob.type.includes("webm")) {
+  //         key = `${key}.webm`;
+  //       } else if (blob.type.includes("mp4")) {
+  //         key = `${key}.mp4`;
+  //       }
+
+  //       new Promise<void>((resolve, reject) => {
+  //         const upload = new tus.Upload(blob, {
+  //           endpoint: `${
+  //             import.meta.env.VITE_SUPABASE_URL
+  //           }/storage/v1/upload/resumable`,
+  //           retryDelays: [0, 3000, 5000, 10000, 20000],
+  //           headers: {
+  //             authorization: `Bearer ${session.access_token}`,
+  //             "x-upsert": "true",
+  //           },
+  //           uploadDataDuringCreation: true,
+  //           removeFingerprintOnSuccess: true,
+  //           metadata: {
+  //             bucketName: import.meta.env.VITE_SUPABASE_BUCKET!,
+  //             objectName: key,
+  //             contentType: blob.type,
+  //             cacheControl: "3600",
+  //           },
+  //           chunkSize: 6 * 1024 * 1024, // NOTE: it must be set to 6MB (for now) do not change it
+  //           onError: (error: any) => {
+  //             console.error("Failed because: " + error);
+  //             reject(error);
+  //           },
+  //           onProgress: (bytesUploaded, bytesTotal) => {
+  //             const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(
+  //               2
+  //             );
+  //             setStatus(`Uploading ${percentage}%`);
+  //           },
+  //           onSuccess: () => {
+  //             const publicUrl = `${
+  //               import.meta.env.VITE_SUPABASE_URL
+  //             }/storage/v1/object/public/audionotes_app/${key}`;
+  //             setAudioUrl(publicUrl);
+  //             setStatus("Generating notes...");
+  //             stopRecording();
+  //             setIsRecordingAllow(true);
+
+  //             // if (plan?.plan === "pro") {
+  //             //   setActiveTab("files");
+  //             //   // setStartRecordings("");
+  //             // } else if (plan?.plan === "free") {
+  //             //   // setUpgradePlan("upgradePlan");
+  //             //   // setStartRecordings("");
+  //             // } else if (plan?.plan === "personal") {
+  //             //   setUpgradeToProScreen("proScreen");
+  //             //   // setStartRecordings("");
+  //             // }
+  //             resolve();
+  //           },
+  //         });
+
+  //         // Check if there are any previous uploads to continue.
+  //         return upload.findPreviousUploads().then((previousUploads) => {
+  //           // Found previous uploads so we select the first one.
+  //           if (previousUploads.length) {
+  //             upload.resumeFromPreviousUpload(previousUploads[0]);
+  //           }
+
+  //           // Start the upload
+  //           upload.start();
+  //         });
+  //       });
+  //     } catch (err) {
+  //       handlePending("audio", false);
+  //       setStatus("Generation failed");
+  //       // errorToast(`${err}`);
+  //       console.log(err, "err");
+  //     } finally {
+  //       setStatus("");
+  //     }
+  //   },
+  //   [handlePending]
+  // );
 
   const handleFileUpload = useCallback(
     async (blob: Blob | File, type: "image" | "audio") => {
@@ -115,7 +222,7 @@ const RecordAudio = ({
           key = `${key}.mp4`;
         }
 
-        new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
           const upload = new tus.Upload(blob, {
             endpoint: `${
               import.meta.env.VITE_SUPABASE_URL
@@ -133,7 +240,7 @@ const RecordAudio = ({
               contentType: blob.type,
               cacheControl: "3600",
             },
-            chunkSize: 6 * 1024 * 1024, // NOTE: it must be set to 6MB (for now) do not change it
+            chunkSize: 6 * 1024 * 1024,
             onError: (error: any) => {
               console.error("Failed because: " + error);
               reject(error);
@@ -150,39 +257,21 @@ const RecordAudio = ({
               }/storage/v1/object/public/audionotes_app/${key}`;
               setAudioUrl(publicUrl);
               setStatus("Generating notes...");
-              // if (plan?.plan === "pro") {
-              //   setActiveTab("files");
-              //   // setStartRecordings("");
-              // } else if (plan?.plan === "free") {
-              //   // setUpgradePlan("upgradePlan");
-              //   // setStartRecordings("");
-              // } else if (plan?.plan === "personal") {
-              //   setUpgradeToProScreen("proScreen");
-              //   // setStartRecordings("");
-              // }
               resolve();
             },
           });
-          console.log(upload, "upload");
 
-          // Check if there are any previous uploads to continue.
-          return upload.findPreviousUploads().then((previousUploads) => {
-            // Found previous uploads so we select the first one.
+          upload.findPreviousUploads().then((previousUploads) => {
             if (previousUploads.length) {
               upload.resumeFromPreviousUpload(previousUploads[0]);
             }
-
-            // Start the upload
             upload.start();
           });
         });
       } catch (err) {
         handlePending("audio", false);
         setStatus("Generation failed");
-        // errorToast(`${err}`);
         console.log(err, "err");
-      } finally {
-        setStatus("");
       }
     },
     [handlePending]
@@ -211,24 +300,114 @@ const RecordAudio = ({
     }
   }, [recordingBlobState]);
 
+  // const handleCancelRecording = useCallback(() => {
+  //   setIsCancelled(true);
+  //   stopRecording();
+  //   setRecordingStopped(true);
+  //   setRecordingBlobState(null);
+  //   // setShouldProcessRecording(false);
+  // }, [stopRecording]);
   const handleCancelRecording = useCallback(() => {
     setIsCancelled(true);
     stopRecording();
     setRecordingStopped(true);
     setRecordingBlobState(null);
-    // setShouldProcessRecording(false);
-  }, [stopRecording]);
+    setShouldProcessRecording(false);
+  }, [stopRecording, setIsCancelled, setRecordingStopped]);
+
+  // const sendNoteToAPI = useCallback(async () => {
+  //   if (!accessToken) {
+  //     // errorToast("Authentication error. Please try logging in again.");
+  //     handlePending("audio", false);
+  //     handlePending("text", false);
+  //     return;
+  //   }
+
+  //   if (
+  //     (noteType === "upload" || noteType === "audio" || noteType == "image") &&
+  //     !audioUrl
+  //   ) {
+  //     return;
+  //   }
+
+  //   if (noteType === "youtube") {
+  //     setStatus("Processing Youtube video...");
+  //   }
+
+  //   if (noteType === "text" && !inputText) {
+  //     return;
+  //   }
+
+  //   const { error } = await createNote({
+  //     noteType,
+  //     audioUrl,
+  //     youtubeUrl,
+  //     imageUrl,
+  //     text: inputText,
+  //     audioFilename: audioUrl?.split("/").pop() || "",
+  //     device: navigator?.userAgent ?? "Web",
+  //     accessToken,
+  //   });
+
+  //   // Reset all recording-related states regardless of plan type
+  //   const resetRecordingStates = () => {
+  //     setRecordingStopped(true);
+  //     setRecordingBlobState(null);
+  //     setRecordingStarted(false);
+  //     setIsCancelled(true);
+  //     handlePending("audio", false);
+  //     handlePending("text", false);
+  //     setNoteType("audio");
+  //     setAudioUrl(undefined);
+  //     setYoutubeUrl(undefined);
+  //     setInputText(undefined);
+  //     setImageUrl(undefined);
+  //     setStatus("");
+  //   };
+
+  //   // Handle navigation based on plan type
+  //   if (plan?.plan === "pro") {
+  //     setActiveTab("files");
+  //     setStartRecordings("");
+  //   } else if (plan?.plan === "free") {
+  //     setUpgradePlan("upgradePlan");
+  //     setStartRecordings("");
+  //   } else if (plan?.plan === "personal") {
+  //     setUpgradeToProScreen("proScreen");
+  //     setStartRecordings("");
+  //   }
+
+  //   // Reset states after navigation logic
+  //   resetRecordingStates();
+
+  //   if (error) {
+  //     console.error("Error sending note to API:", error);
+  //   }
+  // }, [
+  //   noteType,
+  //   audioUrl,
+  //   imageUrl,
+  //   youtubeUrl,
+  //   inputText,
+  //   accessToken,
+  //   handlePending,
+  //   plan,
+  //   setActiveTab,
+  //   setStartRecordings,
+  //   setUpgradePlan,
+  //   setUpgradeToProScreen,
+  //   setRecordingStopped,
+  //   setRecordingStarted,
+  //   setIsCancelled,
+  // ]);
 
   const sendNoteToAPI = useCallback(async () => {
-    if (!accessToken) {
-      // errorToast("Authentication error. Please try logging in again.");
-      handlePending("audio", false);
-      handlePending("text", false);
+    if (!accessToken || !shouldProcessRecording) {
       return;
     }
 
     if (
-      (noteType === "upload" || noteType === "audio" || noteType == "image") &&
+      (noteType === "upload" || noteType === "audio" || noteType === "image") &&
       !audioUrl
     ) {
       return;
@@ -253,6 +432,7 @@ const RecordAudio = ({
       accessToken,
     });
 
+    // Reset states based on plan type
     if (plan?.plan === "pro") {
       setActiveTab("files");
       setStartRecordings("");
@@ -264,10 +444,12 @@ const RecordAudio = ({
       setStartRecordings("");
     }
 
-    if (error) {
-      console.error("Error sending note to API:", error);
-    }
-
+    // Reset all recording states
+    setRecordingStopped(true);
+    setIsRecordingAllow(true);
+    setRecordingBlobState(null);
+    setRecordingStarted(false);
+    setIsCancelled(true);
     handlePending("audio", false);
     handlePending("text", false);
     setNoteType("audio");
@@ -276,37 +458,74 @@ const RecordAudio = ({
     setInputText(undefined);
     setImageUrl(undefined);
     setStatus("");
+    setShouldProcessRecording(false);
+
+    if (error) {
+      console.error("Error sending note to API:", error);
+    }
   }, [
     noteType,
     audioUrl,
-    imageUrl,
     youtubeUrl,
+    imageUrl,
     inputText,
     accessToken,
-    handlePending,
+    shouldProcessRecording,
+    plan,
   ]);
 
-  useEffect(() => {
-    sendNoteToAPI();
-  }, [audioUrl, inputText, youtubeUrl, sendNoteToAPI]);
+  // Modified stop recording handler
+  const handleStopRecordingAndProcess = useCallback(() => {
+    if (!recordingStopped) {
+      handleStopRecording();
+      setShouldProcessRecording(true);
+    } else {
+      handleStopRecording();
+      setShouldProcessRecording(false);
+    }
+  }, [recordingStopped, handleStopRecording]);
+
+  // useEffect(() => {
+  //   sendNoteToAPI();
+  // }, [audioUrl, inputText, youtubeUrl, sendNoteToAPI]);
 
   useEffect(() => {
-    if (recordingBlob && !isCancelled) {
+    if (audioUrl && shouldProcessRecording) {
+      sendNoteToAPI();
+    }
+  }, [audioUrl, shouldProcessRecording]);
+
+  // useEffect(() => {
+  //   if (recordingBlob && !isCancelled) {
+  //     setRecordingBlobState(recordingBlob);
+  //   }
+  // }, [recordingBlob]);
+
+  // Update recording blob only when recording is stopped
+  useEffect(() => {
+    if (recordingBlob && !isCancelled && recordingStopped) {
       setRecordingBlobState(recordingBlob);
     }
-  }, [recordingBlob]);
+  }, [recordingBlob, isCancelled, recordingStopped]);
+
+  // useEffect(() => {
+  //   if (recordingBlobState && !isCancelled) {
+  //     handlePending("audio", true);
+  //     stableHandleRecording(recordingBlobState);
+  //   }
+  // }, [
+  //   recordingBlobState,
+  //   handlePending,
+  //   stableHandleRecording,
+  //   handleFileUpload,
+  // ]);
 
   useEffect(() => {
-    if (recordingBlobState && !isCancelled) {
+    if (recordingBlobState && shouldProcessRecording && !isCancelled) {
       handlePending("audio", true);
-      stableHandleRecording(recordingBlobState);
+      handleFileUpload(recordingBlobState, "audio");
     }
-  }, [
-    recordingBlobState,
-    handlePending,
-    stableHandleRecording,
-    handleFileUpload,
-  ]);
+  }, [recordingBlobState, shouldProcessRecording, isCancelled]);
 
   useEffect(() => {
     user();
@@ -386,7 +605,7 @@ const RecordAudio = ({
               size={"lg"}
               className="flex items-center gap-1 font-medium text-base leading-5 py-5"
               variant={"primary"}
-              onClick={handleStopRecording}
+              onClick={handleStopRecordingAndProcess}
             >
               <RecordIcon />
               {recordingStopped ? "Start recording" : "Stop recording"}

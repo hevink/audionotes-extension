@@ -11,6 +11,7 @@ type RecentFileProps = {
   setStartRecordings: (value: string) => void;
   isAuthentications: boolean;
   setUpgradeToProScreen: (value: string) => void;
+  storedLoginState: string;
 };
 
 const RecentFile: React.FC<RecentFileProps> = ({
@@ -19,8 +20,9 @@ const RecentFile: React.FC<RecentFileProps> = ({
   setStartRecordings,
   isAuthentications,
   setUpgradeToProScreen,
+  storedLoginState,
 }) => {
-  const { data: notes = [], isPending: isNotesLoading } = useGetInitialNotes();
+  const { data: notes = [], isLoading: isNotesLoading } = useGetInitialNotes();
   const { data: userPlan } = useGetUserPlan() as any;
 
   return (
@@ -42,8 +44,8 @@ const RecentFile: React.FC<RecentFileProps> = ({
         <div className="h-[272px] flex flex-col items-center justify-center">
           <p className="text-xl font-semibold">Welcome to Audionotes!</p>
           <p className="text-lg text-center font-medium text-subheading mt-3 max-w-80">
-            Hit the <span className="text-primary"> Start recording </span>button to record your first
-            audio note
+            Hit the <span className="text-primary"> Start recording </span>
+            button to record your first audio note
           </p>
         </div>
       )}
@@ -60,15 +62,38 @@ const RecentFile: React.FC<RecentFileProps> = ({
           size={"lg"}
           className="flex items-center font-medium text-base leading-5 w-full"
           variant={"primary"}
+          // onClick={() => {
+          //   if (
+          //     isAuthentications &&
+          //     (userPlan?.plan == "free" || userPlan?.plan === "personal")
+          //   ) {
+          //     setUpgradeToProScreen("proScreen");
+          //   } else if (userPlan?.plan == "pro") {
+          //     setStartRecordings("startRecordings");
+          //     handleStartRecording();
+          //   } else {
+          //     window.open("https://home.audionotes.app/", "_blank");
+          //   }
+          // }}
           onClick={() => {
-            if (
-              isAuthentications &&
-              (userPlan?.plan == "free" || userPlan?.plan === "personal")
-            ) {
-              setUpgradeToProScreen("proScreen");
-            } else if (userPlan?.plan == "pro") {
-              setStartRecordings("startRecordings");
-              handleStartRecording();
+            if (isAuthentications) {
+              if (storedLoginState === "true" && userPlan?.plan !== "pro") {
+                setUpgradeToProScreen("proScreen");
+              } else if (
+                storedLoginState === "false" &&
+                (userPlan?.plan == "free" || userPlan?.plan === "personal")
+              ) {
+                setStartRecordings("startRecordings");
+                handleStartRecording();
+              } else if (
+                storedLoginState === "false" &&
+                userPlan?.plan == "pro"
+              ) {
+                setStartRecordings("startRecordings");
+                handleStartRecording();
+              } else {
+                window.open("https://home.audionotes.app/", "_blank");
+              }
             } else {
               window.open("https://home.audionotes.app/", "_blank");
             }
