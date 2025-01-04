@@ -337,7 +337,7 @@ const RecordAudio = ({
       >
         <Badge
           variant="primary"
-          className="rounded-full font-semibold text-sm leading-4 py-1.5 px-2.5 gap-1"
+          className="rounded-full font-semibold text-sm leading-4 py-1.5 px-2.5 gap-1 cursor-pointer"
         >
           Upgrade to get more minutes
           <RightArrowIcon />

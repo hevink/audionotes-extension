@@ -1,7 +1,7 @@
 // New Component: RecentFileItem
 import React, { useCallback, useRef, useState } from "react";
 import { AlertCircle, Loader2, Pause, Play, Send } from "lucide-react";
-import { cn, getDateTime } from "../../lib/utils";
+import { cn, getDateTime, truncateText } from "../../lib/utils";
 import { PartialTypeNote } from "../../lib/types";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
@@ -137,7 +137,7 @@ const RecentFileItem: React.FC<RecentFileItemProps> = ({
 
             <div className="space-y-1">
               <p className="text-heading leading-6 font-medium text-base">
-                {note.title}
+              {truncateText(note.title!)}
               </p>
 
               <p className="flex items-center space-x-2 text-date text-sm font-medium">

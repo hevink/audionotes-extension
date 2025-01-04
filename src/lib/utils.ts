@@ -29,8 +29,16 @@ export function formatTime(seconds: number, hrDisplay: boolean): string {
   const remainingSeconds = Math.floor(seconds % 60);
 
   return hrDisplay
-    ? `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(
-        remainingSeconds
-      ).padStart(2, "0")}`
-    : `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+    ? `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+        2,
+        "0"
+      )}:${String(remainingSeconds).padStart(2, "0")}`
+    : `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(
+        2,
+        "0"
+      )}`;
 }
+
+export const truncateText = (text: string, length: number = 30): string => {
+  return text.length > length ? text.slice(0, length) + "..." : text;
+};
