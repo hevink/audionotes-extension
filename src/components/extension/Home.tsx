@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { FileText } from "lucide-react";
+import { FileText, Loader2 } from "lucide-react";
 import EmailShare from "./EmailShare";
 import Header from "../commonComponent/Header";
 import RecentAudio from "./RecentAudio";
@@ -10,11 +10,16 @@ import UpgradePlan from "./UpgradePlan";
 import { useAudioRecorder } from "react-audio-voice-recorder";
 import AuthScreen from "./AuthScreen";
 import UpgradeToPro from "./UpgradeToPro";
-import { useGetLanguages } from "../../queries";
+import { useGetLanguages, useGetUser, useGetUserPlan } from "../../queries";
+import { getUser } from "../../action";
 
 // ----------------------------------------------------------------
 
-const HomePage = ({ isAuthentications, isFirstTimeLogin }: any) => {
+const HomePage = ({
+  isAuthentications,
+  isFirstTimeLogin,
+  setIsFirstTimeLogin,
+}: any) => {
   // Manage extension screens ...
   const [activeTab, setActiveTab] = useState("audio");
   const [sendMail, setSendMail] = useState("");
@@ -34,6 +39,9 @@ const HomePage = ({ isAuthentications, isFirstTimeLogin }: any) => {
   // Show language states ...
   const { data: languages = [], isLoading: isGetLanguageLoading } =
     useGetLanguages();
+  const { isLoading } = useGetUserPlan() as any;
+
+  const { isLoading: isUserLoading } = useGetUser();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]?.name);
 
@@ -63,6 +71,7 @@ const HomePage = ({ isAuthentications, isFirstTimeLogin }: any) => {
     startRecording();
     setRecordingStarted(true);
     setRecordingStopped(false); // Reset stopped state
+    console.log("ahhh ....");
   }, [startRecording]);
 
   //
@@ -72,8 +81,11 @@ const HomePage = ({ isAuthentications, isFirstTimeLogin }: any) => {
       stopRecording();
       setIsRecordingAllow(false);
       setRecordingStopped(true); // Mark recording as stopped
+      console.log("Greate ...");
     } else {
       // Restart recording if it was canceled or stopped
+      console.log("ahhh ....");
+
       handleStartRecording();
       setRecordingStopped(false); // Reset stopped state
     }
@@ -140,6 +152,7 @@ const HomePage = ({ isAuthentications, isFirstTimeLogin }: any) => {
               isPaused={isPaused}
               setIsCancelled={setIsCancelled}
               isCancelled={isCancelled}
+              setIsRecordingAllow={setIsRecordingAllow}
             />
           ) : upgradePlan === "upgradePlan" ? (
             <UpgradePlan
@@ -154,6 +167,7 @@ const HomePage = ({ isAuthentications, isFirstTimeLogin }: any) => {
               setActiveTab={setActiveTab}
               setUpgradeToProScreen={setUpgradeToProScreen}
               setUpgradePlan={setUpgradePlan}
+              setIsFirstTimeLogin={setIsFirstTimeLogin}
             />
           ) : (
             <>
@@ -198,6 +212,10 @@ const HomePage = ({ isAuthentications, isFirstTimeLogin }: any) => {
                   storedLoginState={isFirstTimeLogin}
                   selectedLanguage={selectedLanguage}
                 />
+              ) : isUserLoading || isLoading ? (
+                <div className="h-[272px] flex items-center justify-center">
+                  <Loader2 className="h-8 animate-spin text-primary" />
+                </div>
               ) : isAuthentications ? (
                 <RecentFile
                   setSendMail={setSendMail}
@@ -205,10 +223,11 @@ const HomePage = ({ isAuthentications, isFirstTimeLogin }: any) => {
                   setStartRecordings={setStartRecordings}
                   isAuthentications={isAuthentications}
                   setUpgradeToProScreen={setUpgradeToProScreen}
+                  storedLoginState={isFirstTimeLogin}
                 />
-              ) : (
+              ) : !isUserLoading || !isLoading ? (
                 <AuthScreen isAuthentications={isAuthentications} />
-              )}
+              ) : null}
             </>
           )}
         </div>

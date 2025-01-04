@@ -154,6 +154,7 @@ const UpgradePlan = ({
         size={"lg"}
         className="flex py-7 items-center rounded-full font-medium text-base mt-3 leading-5 w-full bg-gradient-to-r from-[#FF4D00] to-[#FF2600] text-white"
         variant={"primary"}
+        onClick={() => window.open("https://home.audionotes.app/", "_blank")}
       >
         Upgrade to PRO
       </Button>

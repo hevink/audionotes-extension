@@ -8,7 +8,16 @@ const UpgradeToPro = ({
   setActiveTab,
   setUpgradeToProScreen,
   setUpgradePlan,
+  setIsFirstTimeLogin,
 }: any) => {
+  const handleUpgradeToPro = () => {
+    setUpgradeToProScreen("");
+    setStartRecordings("startRecordings");
+    handleStartRecording();
+    setIsFirstTimeLogin("false");
+    sessionStorage.setItem("isFirstTimeLogin", "false");
+  };
+
   return (
     <div className="p-5">
       {/* <div className="flex items-center justify-center gap-2">
@@ -69,9 +78,7 @@ const UpgradeToPro = ({
         size="lg"
         className="font-medium text-base w-full bg-[#F3F3F3] gap-1.5"
         onClick={() => {
-          setStartRecordings("startRecordings");
-          handleStartRecording();
-          sessionStorage.setItem("isFirstTimeLogin", "false");
+          handleUpgradeToPro();
         }}
       >
         Continue to Start Recording <RightArrowIcon color="#454545" />

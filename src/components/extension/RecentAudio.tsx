@@ -17,9 +17,7 @@ const RecentAudio = ({
   storedLoginState,
   selectedLanguage,
 }: any) => {
-  const { data: userPlan } = useGetUserPlan() as any;
-
-  console.log(storedLoginState, "storedLoginState");
+  const { data: userPlan, isLoading } = useGetUserPlan() as any;
 
   const [selectedAudioDevice, setSelectedAudioDevice] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -121,6 +119,7 @@ const RecentAudio = ({
           className="flex items-center font-medium text-base leading-5 w-full gap-1"
           variant={"primary"}
           id="start"
+          disabled={isLoading}
           onClick={() => {
             if (isAuthentications) {
               if (storedLoginState === "true" && userPlan?.plan !== "pro") {
