@@ -10,14 +10,11 @@ import UpgradePlan from "./UpgradePlan";
 import { useAudioRecorder } from "react-audio-voice-recorder";
 import AuthScreen from "./AuthScreen";
 import UpgradeToPro from "./UpgradeToPro";
-import { useGetLanguages, useGetUser } from "../../queries";
+import { useGetLanguages } from "../../queries";
 
 // ----------------------------------------------------------------
 
-const HomePage = ({ isAuthentications }: any) => {
-  const storedLoginState = sessionStorage.getItem("isFirstTimeLogin");
-  const { isLoading: isUserLoading } = useGetUser();
-
+const HomePage = ({ isAuthentications, isFirstTimeLogin }: any) => {
   // Manage extension screens ...
   const [activeTab, setActiveTab] = useState("audio");
   const [sendMail, setSendMail] = useState("");
@@ -198,7 +195,7 @@ const HomePage = ({ isAuthentications }: any) => {
                   handleStartRecording={handleStartRecording}
                   isAuthentications={isAuthentications}
                   setUpgradeToProScreen={setUpgradeToProScreen}
-                  storedLoginState={storedLoginState}
+                  storedLoginState={isFirstTimeLogin}
                   selectedLanguage={selectedLanguage}
                 />
               ) : isAuthentications ? (

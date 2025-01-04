@@ -19,6 +19,8 @@ const RecentAudio = ({
 }: any) => {
   const { data: userPlan } = useGetUserPlan() as any;
 
+  console.log(storedLoginState, "storedLoginState");
+
   const [selectedAudioDevice, setSelectedAudioDevice] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [audioDevices, setAudioDevices] = useState<any>([]);
