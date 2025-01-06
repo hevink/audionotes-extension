@@ -29,8 +29,6 @@ const RecentFile: React.FC<RecentFileProps> = ({
 
   const [newNotes, setNewNotes] = React.useState<any[]>([]);
 
-  console.log("newNotes", newNotes);
-
   useEffect(() => {
     const channel = supabase.channel("notes-changes");
 
@@ -42,24 +40,16 @@ const RecentFile: React.FC<RecentFileProps> = ({
         ...(oldNotes || []),
       ]);
 
-      // Add or replace note if is_ready is "yes"
+      // Append the new note to newNotes state if is_ready is "yes"
       if (payload.new.is_ready === "yes") {
         setNewNotes((prevNotes) => {
-          const noteExists = prevNotes.some(
-            (note) => note.id === payload.new.id
-          );
-          if (noteExists) {
-            // Replace the existing note with the new one
-            return prevNotes.map((note) =>
-              note.id === payload.new.id ? payload.new : note
-            );
+          // Prevent duplicates
+          if (!prevNotes.some((note) => note.id === payload.new.id)) {
+            return [...prevNotes, payload.new]; // Append new note
           }
-          // Add the new note to the beginning if it's not already present
-          return [payload.new, ...prevNotes];
+          return prevNotes; // Return existing notes if duplicate
         });
       }
-
-      console.log("payload.new", payload.new);
 
       if (
         payload.new.is_ready === "error" &&
@@ -89,12 +79,12 @@ const RecentFile: React.FC<RecentFileProps> = ({
     };
   }, []);
 
-  // 🛡️ Ensure no duplicate IDs in notes
+  // 🛡️ Ensure no duplicate IDs in notes by combining new and old notes
   const filteredNotes = notes.filter(
     (note: any) => !newNotes.some((newNote) => newNote.id === note.id)
   );
 
-  const allNotes = [...newNotes, ...filteredNotes];
+  const allNotes = [...newNotes, ...filteredNotes]
 
   return (
     <div className="space-y-2 px-5 py-4">
@@ -103,14 +93,17 @@ const RecentFile: React.FC<RecentFileProps> = ({
           <Loader2 className="h-8 animate-spin text-primary" />
         </div>
       ) : allNotes.length > 0 ? (
-        allNotes.map((note, index) => (
+        (allNotes.length >= 4
+          ? allNotes.filter(note => note.is_ready === "yes").slice(0, 3) // Filter out notes with is_ready !== "yes" if there are 4 or more
+          : allNotes
+        ).map((note, index) => (
           <RecentFileItem
             key={note.id}
             note={note}
             setSendMail={setSendMail}
-            isLast={index === allNotes.length - 1}
+            isLast={index === (allNotes.length >= 4 ? 2 : allNotes.length - 1)} // Check if this is the last note in the sliced/filtered array
           />
-        ))
+        ))        
       ) : (
         <div className="h-[272px] flex flex-col items-center justify-center">
           <p className="text-xl font-semibold">Welcome to Audionotes!</p>
