@@ -342,10 +342,10 @@ const RecordAudio = ({
       </div>
       <div className="h-[242px] flex items-center justify-center">
         {mediaRecorder && (
-          <div className="flex justify-center items-center w-full">
+          <div className="flex justify-center items-center">
             <LiveAudioVisualizer
               mediaRecorder={mediaRecorder}
-              width={280}
+              width={340}
               height={50}
               barWidth={3}
               gap={4}

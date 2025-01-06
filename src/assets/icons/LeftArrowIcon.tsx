@@ -24,9 +24,9 @@ export const LeftArrowIcon = () => {
           width="140.731"
           height="140.731"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feGaussianBlur in="BackgroundImageFix" stdDeviation="27.1828" />
           <feComposite
             in2="SourceAlpha"

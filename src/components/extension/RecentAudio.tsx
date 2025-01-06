@@ -7,6 +7,7 @@ import RecordIcon from "../../assets/icons/RecordIcon";
 import AudioDropdown from "./AudioDropdown";
 import { useGetUserPlan } from "../../queries";
 import { PrimaryArrowIcon } from "../../assets/icons/LeftArrowIcon";
+import { truncateText } from "../../lib/utils";
 
 interface RecentAudioProps {
   setShowLanguagesData: (value: string) => void;
@@ -85,7 +86,7 @@ const RecentAudio: React.FC<RecentAudioProps> = ({
             <span className="font-medium text-heading text-base">
               Audio -{" "}
               {selectedAudioDevice
-                ? cleanDeviceLabel(selectedAudioDevice.label)
+                ? truncateText(cleanDeviceLabel(selectedAudioDevice.label),24)
                 : "Select a device"}
             </span>
           </div>
