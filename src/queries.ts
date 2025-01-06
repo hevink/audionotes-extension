@@ -6,6 +6,7 @@ import supabase from "./lib/supabase/client";
 import { queryClient } from "./provider";
 
 export const STALE_TIME = 1000 * 60 * 60 * 24;
+export const INITIAL_NOTE_COUNT = 3;
 
 export const useGetUser = (enabled: boolean = true) => {
   return useQuery({
@@ -110,7 +111,7 @@ export const useGetInitialNotes = (): UseQueryResult<PartialTypeNote[]> => {
         )
         .eq("note_type", "audio") // Filter for audio notes
         .order("created_at", { ascending: false })
-        .range(0, 3 - 1);
+        .range(0, INITIAL_NOTE_COUNT - 1);
 
       if (error) {
         console.error("Error getting initial audio notes:", error);
@@ -131,6 +132,40 @@ export const useGetInitialNotes = (): UseQueryResult<PartialTypeNote[]> => {
     gcTime: STALE_TIME,
   });
 };
+
+export const useGetRemainingNotesInBg = (enabled: boolean) => {
+
+  return useQuery({
+    queryKey: ["all_notes", "remaining"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("notes")
+        .select(
+          "id, folder_id, title, created_at, note_type, favourite, public, is_ready, recommendations, note_type, audio_url, media_duration, attached_image_urls, transcript, tags, youtube_url, file_name"
+        )
+        .order("created_at", { ascending: false })
+        .range(INITIAL_NOTE_COUNT, 5000);
+
+      if (error) {
+        console.error("Error fetching remaining notes:", error);
+        return [];
+      }
+
+      queryClient.setQueryData(["all_notes"], (oldData: any) => {
+        return [...oldData, ...data];
+      });
+
+      data.forEach((note) => {
+        queryClient.setQueryData(["notes", note.id], note);
+      });
+
+      return data;
+    },
+    enabled,
+    staleTime: STALE_TIME,
+  });
+};
+
 
 export const useGetLanguages = () => {
   return useQuery({
