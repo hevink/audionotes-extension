@@ -29,11 +29,10 @@ interface RecorderProps {
   setRecordingStopped: (value: boolean) => void;
   setRecordingStarted: (value: boolean) => void;
   handleStopRecording: () => void;
-  handlePending: (type: "text" | "audio", value: boolean) => void;
+  handlePending: (type: "audio", value: boolean) => void;
   setActiveTab: (tab: "audio" | "files") => void;
   setStartRecordings: (recording: string) => void;
   isAudioPending: boolean;
-  isTextPending: boolean;
   setUpgradePlan: (upgradePlan: string) => void;
   setUpgradeToProScreen: (upgradePlan: string) => void;
   isPaused: boolean;
@@ -57,7 +56,6 @@ const RecordAudio = ({
   setActiveTab,
   setStartRecordings,
   isAudioPending,
-  isTextPending,
   setUpgradePlan,
   setUpgradeToProScreen,
   isPaused,
@@ -70,9 +68,9 @@ const RecordAudio = ({
   );
   const [status, setStatus] = useState("");
   const [audioUrl, setAudioUrl] = useState<string>();
-  const [noteType, setNoteType] = useState<
-    "audio" | "upload" | "text" | "youtube" | "image"
-  >("audio");
+  const [noteType, setNoteType] = useState<"audio" | "upload" | "text">(
+    "audio"
+  );
   const [inputText, setInputText] = useState<string>();
   const [youtubeUrl, setYoutubeUrl] = useState<string>();
   const [imageUrl, setImageUrl] = useState<string>();
@@ -186,13 +184,6 @@ const RecordAudio = ({
     }
   }, [recordingBlobState]);
 
-  // const handleCancelRecording = useCallback(() => {
-  //   setIsCancelled(true);
-  //   stopRecording();
-  //   setRecordingStopped(true);
-  //   setRecordingBlobState(null);
-  //   // setShouldProcessRecording(false);
-  // }, [stopRecording]);
   const handleCancelRecording = useCallback(() => {
     setIsCancelled(true);
     stopRecording();
@@ -206,15 +197,8 @@ const RecordAudio = ({
       return;
     }
 
-    if (
-      (noteType === "upload" || noteType === "audio" || noteType === "image") &&
-      !audioUrl
-    ) {
+    if (noteType === "audio" && !audioUrl) {
       return;
-    }
-
-    if (noteType === "youtube") {
-      setStatus("Processing Youtube video...");
     }
 
     if (noteType === "text" && !inputText) {
@@ -251,7 +235,6 @@ const RecordAudio = ({
     setRecordingStarted(false);
     setIsCancelled(true);
     handlePending("audio", false);
-    handlePending("text", false);
     setNoteType("audio");
     setAudioUrl(undefined);
     setYoutubeUrl(undefined);
@@ -411,7 +394,7 @@ const RecordAudio = ({
           </div>
         ) : (
           <div className="space-y-2">
-            {(isAudioPending || isTextPending) && (
+            {isAudioPending && (
               <Button variant="transparent" size="lg" className="gap-1.5">
                 <LoaderCircle className="animate-spin size-4" />
                 {status}

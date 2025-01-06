@@ -53,7 +53,7 @@ const AudioDropdown: React.FC<AudioDropdownProps> = ({
       </div>
 
       {isOpen && (
-        <div className="absolute -right-6 mt-5 w-[350px] bg-white rounded-[22px] shadow-lg border border-gray-200 py-2 pb-1 z-50">
+        <div className="absolute -right-4 mt-5 w-[350px] bg-white rounded-[22px] shadow-lg border border-gray-200 py-2 pb-1 z-50">
           {filteredDevices.length > 0 && filteredDevices[0]?.deviceId !== "" ? (
             filteredDevices.map((device) => (
               <div

@@ -86,7 +86,7 @@ const RecentAudio: React.FC<RecentAudioProps> = ({
             <span className="font-medium text-heading text-base">
               Audio -{" "}
               {selectedAudioDevice
-                ? truncateText(cleanDeviceLabel(selectedAudioDevice.label),24)
+                ? truncateText(cleanDeviceLabel(selectedAudioDevice.label), 24)
                 : "Select a device"}
             </span>
           </div>

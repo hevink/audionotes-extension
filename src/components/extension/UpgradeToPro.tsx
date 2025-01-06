@@ -30,7 +30,6 @@ const UpgradeToPro: React.FC<UpgradeToProProps> = ({
   return (
     <div className="p-5">
       <div className="flex items-center justify-between">
-        {/* Left Side: Mic Icon and Title */}
         <div className="flex items-center space-x-2">
           <div className="bg-primary p-2 rounded-lg">
             <Mic className="w-4 h-4 text-white" />
@@ -40,7 +39,6 @@ const UpgradeToPro: React.FC<UpgradeToProProps> = ({
           </h1>
         </div>
 
-        {/* Right Side: Close Icon */}
         <div
           className="bg-plain rounded-full p-2 cursor-pointer"
           onClick={() => {
